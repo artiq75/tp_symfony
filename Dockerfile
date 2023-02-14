@@ -20,4 +20,4 @@ RUN git config --global user.email "artiq75@icloud.eu" \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 RUN apt-get update && apt-get -y install nodejs
-    RUN npm i -g yarn
+RUN npm i -g yarn
