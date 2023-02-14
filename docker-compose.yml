@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+# déclaration du container de base de données
+  base:
+    image: mariadb:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fony
+      MYSQL_USER: fony
+      MYSQL_PASSWORD: fony
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  # déclaration du container PHP
+  php:
+    restart: always
+    user: "1000:1000"
+    build:
+      context: .
+      args:
+        USER_ID: 'artiq'
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./:/var/www/fony
+    depends_on:
+      - base
+
+  # creation du serveur web
+  nginx:
+    restart: always
+    image: nginx:stable-alpine
+    ports:
+      - '8080:80'
+    volumes:
+      - ./:/var/www/fony
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - base
