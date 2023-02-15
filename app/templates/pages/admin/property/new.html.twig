@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  
+  <main class="container">
+    <h1>Ajouter un nouveau bien</h1>
+
+    {{ include('pages/admin/property/_form.html.twig', {button_label: 'Ajouter le nouveau produit'}) }}
+  </main>
+
+{% endblock %}

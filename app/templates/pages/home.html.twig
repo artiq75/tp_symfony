@@ -6,7 +6,7 @@
         {% for property in properties %}
             <li>
                 <article class="property-item">
-                    <img src="{{ property.image }}" alt="">
+                    <img src="{{ vich_uploader_asset(property) }}" alt="">
                     <h2>{{ property.type.label }}</h2>
                     <h3>{{ property.type.formatedPrice }} €</h3>
                     <a href="{{ path('property.show', {id: property.id}) }}" class="btn btn-primary">

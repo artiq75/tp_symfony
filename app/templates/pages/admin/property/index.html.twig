@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  
+  <main class="container">
+      <h1>Tout mes biens</h1>
+
+      {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+
+      <a href="{{ path('admin.property.new') }}" class="btn btn-primary">Ajouter un nouveau bien</a>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Vignette</th>
+            <th>Titre</th>
+            <th>Prix</th>
+            <th>Début disponibilité</th>
+            <th>Fin disponibilité</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for property in properties %}
+            <tr>
+              <td><img src="{{ vich_uploader_asset(property) }}" alt=""></td>
+              <td>{{ property.type.label }}</td>
+              <td>{{ property.type.formatedPrice }} €</td>
+              <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
+              <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
+              <td>
+                <a class="btn btn-primary" href="{{ path('admin.property.edit', {id: property.id}) }}">Modifier</a>
+                {{ include('pages/admin/property/_delete_form.html.twig', {id: property.id}) }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </main>
+
+{% endblock %}

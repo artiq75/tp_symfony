@@ -7,17 +7,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
+#[Vich\Uploadable]
 class Property
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $availability_start = null;
@@ -35,10 +35,33 @@ class Property
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Booking::class)]
     private Collection $bookings;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image_name = null;
+
+    #[Vich\UploadableField(mapping: 'property_images', fileNameProperty: 'image_name')]
+    private ?File $image_file = null;
+
+    #[ORM\Column(nullable: true, type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updated_at = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->bookings = new ArrayCollection();
+    }
+
+    public function setImageFile(?File $image_file = null): void
+    {
+        $this->image_file = $image_file;
+
+        if (null !== $image_file) {
+            $this->setUpdatedAt(new \DateTimeImmutable());
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->image_file;
     }
 
     public function getId(): ?int
@@ -46,14 +69,14 @@ class Property
         return $this->id;
     }
 
-    public function getImage(): ?string
+    public function getImageName(): ?string
     {
-        return $this->image;
+        return $this->image_name;
     }
 
-    public function setImage(?string $image): self
+    public function setImageName(?string $image_name): self
     {
-        $this->image = $image;
+        $this->image_name = $image_name;
 
         return $this;
     }
@@ -132,6 +155,18 @@ class Property
                 $booking->setProperty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

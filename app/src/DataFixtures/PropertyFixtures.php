@@ -64,17 +64,17 @@ class PropertyFixtures extends Fixture
     {
         $this->generateType($manager);
 
-        for ($i=0; $i < 100; $i++) {
-            $datetime = new \DateTime();
-            $dateTimeModify = $datetime->modify('+' . $this->faker->numberBetween(7, 20)  .  ' day');
-            $property = new Property();
-            $property
-            ->setAvailabilityStart($datetime)
-            ->setAvailabilityEnd($dateTimeModify)
-            ->setImage("https://picsum.photos/300/315")
-            ->setType($this->faker->randomElement($this->typeRepository->findAll()));
-            $manager->persist($property);
-        }
+        // for ($i=0; $i < 100; $i++) {
+        //     $datetime = new \DateTime();
+        //     $dateTimeModify = $datetime->modify('+' . $this->faker->numberBetween(7, 20)  .  ' day');
+        //     $property = new Property();
+        //     $property
+        //     ->setAvailabilityStart($datetime)
+        //     ->setAvailabilityEnd($dateTimeModify)
+        //     ->setImageName("https://picsum.photos/300/315")
+        //     ->setType($this->faker->randomElement($this->typeRepository->findAll()));
+        //     $manager->persist($property);
+        // }
 
         $manager->flush();
     }

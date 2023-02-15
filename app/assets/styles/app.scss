@@ -1,6 +1,7 @@
 :root {
     --primary-color: orange;
     --sucess-color: #00ff55;
+    --danger-color: #ff1100;
     --white: white;
     --radius: 7px;
     --radius-sm: 4px;
@@ -58,6 +59,22 @@ select {
     font-size: 1em;
 }
 
+table {
+    min-width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 1em;
+    border: 1px solid black;
+}
+
+table img {
+    width: 120px;
+    height: 120px;
+}
+
 .w-100 {
     min-width: 100%;
 }
@@ -75,6 +92,11 @@ select {
 
 .btn.btn-primary {
     background: var(--primary-color);
+}
+
+.btn.btn-danger {
+    background: var(--danger-color);
+    color: var(--white);
 }
 
 .alert {

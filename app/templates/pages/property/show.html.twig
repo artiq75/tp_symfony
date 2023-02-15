@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 
-
 {% block body %}
   
 <main class="container property-page">
@@ -12,7 +11,7 @@
 
     <h1>{{ property.type.label }}</h1>
     <div class="body">
-        <img src="{{ property.image }}" alt="">
+        <img src="{{ vich_uploader_asset(property) }}" alt="">
         <section>
             <h2>Réserver</h2>
             {{ render(path('booking.book', {id: property.id})) }}
