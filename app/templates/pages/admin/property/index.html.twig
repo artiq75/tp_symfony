@@ -11,33 +11,43 @@
 
       <a href="{{ path('admin.property.new') }}" class="btn btn-primary">Ajouter un nouveau bien</a>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Vignette</th>
-            <th>Titre</th>
-            <th>Prix</th>
-            <th>Début disponibilité</th>
-            <th>Fin disponibilité</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for property in properties %}
+      {% if properties is empty %}
+        <h2>Vous n'avez ajouter aucun bien</h2>
+      {% else %}
+        <table>
+          <thead>
             <tr>
-              <td><img src="{{ vich_uploader_asset(property) }}" alt=""></td>
-              <td>{{ property.type.label }}</td>
-              <td>{{ property.type.formatedPrice }} €</td>
-              <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
-              <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
-              <td>
-                <a class="btn btn-primary" href="{{ path('admin.property.edit', {id: property.id}) }}">Modifier</a>
-                {{ include('pages/admin/property/_delete_form.html.twig', {id: property.id}) }}
-              </td>
+              <th>Vignette</th>
+              <th>Titre</th>
+              <th>Prix</th>
+              <th>Début disponibilité</th>
+              <th>Fin disponibilité</th>
+              <th>Actions</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for property in properties %}
+              <tr>
+                <td><img src="{{ vich_uploader_asset(property) }}" alt=""></td>
+                <td>{{ property.type.label }}</td>
+                <td>{{ property.type.formatedPrice }} €</td>
+                <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
+                <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
+                <td>
+                  <div class="flex gap1">
+                    <a class="btn btn-info" href="{{ path('property.show', {id: property.id}) }}">Voir</a>
+                    <a class="btn btn-primary" href="{{ path('admin.property.edit', {id: property.id}) }}">Modifier</a>
+                    {{ include('includes/_delete_form.html.twig', {
+                      action: path('admin.property.delete', {id: property.id}),
+                      entity: property
+                    }) }}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
   </main>
 
 {% endblock %}

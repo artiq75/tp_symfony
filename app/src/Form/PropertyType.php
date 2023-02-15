@@ -26,7 +26,11 @@ class PropertyType extends AbstractType
             'class' => Type::class,
             'choice_label' => 'label'
         ])
-        ->add('image_file', VichImageType::class)
+        ->add('image_file', VichImageType::class, [
+            'required' => false,
+            'allow_delete' => false,
+            'download_uri' => false,
+        ])
         ;
     }
 

@@ -2,6 +2,7 @@
     --primary-color: orange;
     --sucess-color: #00ff55;
     --danger-color: #ff1100;
+    --info-color: #00d9ff;
     --white: white;
     --radius: 7px;
     --radius-sm: 4px;
@@ -99,10 +100,24 @@ table img {
     color: var(--white);
 }
 
+.btn.btn-info {
+    background: var(--info-color);
+}
+
+.flex {
+    display: flex;
+}
+
+.gap1 {
+    gap: 1em;
+}
+
 .alert {
     max-width: var(--container-sm);
-    padding: 1em;
     border-radius: var(--radius-sm);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
 }
 
 .alert.alert-success {

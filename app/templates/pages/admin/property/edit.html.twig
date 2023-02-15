@@ -2,10 +2,10 @@
 
 {% block body %}
   
-  <main class="container">
-    <h1>{{ property.type.label }}</h1>
+<main class="container property-edit-page">
+  <h1>{{ property.type.label }}</h1>
 
-    {{ include('pages/admin/property/_form.html.twig', {button_label: 'Modifier le bien'}) }}
-  </main>
+  {{ include('pages/admin/property/_form.html.twig', {button_label: 'Modifier le bien'}) }}
+</main>
 
 {% endblock %}

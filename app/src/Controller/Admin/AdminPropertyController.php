@@ -36,8 +36,8 @@ class AdminPropertyController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       $this->propertyRepository->save($property, true);
-
-      return $this->redirectToRoute('home');
+      $this->addFlash('success', 'Bien ajouter avec succès');
+      return $this->redirectToRoute('admin.property.index');
     }
 
     return $this->render('pages/admin/property/new.html.twig', [
@@ -53,8 +53,8 @@ class AdminPropertyController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       $this->propertyRepository->save($property, true);
-
-      return $this->redirectToRoute('home');
+      $this->addFlash('success', 'Bien modifier avec succès');
+      return $this->redirectToRoute('admin.property.index');
     }
 
     return $this->render('pages/admin/property/edit.html.twig', [
