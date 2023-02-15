@@ -1,13 +1,15 @@
 :root {
     --primary-color: orange;
+    --sucess-color: #00ff55;
     --white: white;
-    --container-lg: 1670px;
     --radius: 7px;
     --radius-sm: 4px;
     --gap: 20px;
     --space: 8px;
     --font-family-sans: font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     --shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    --container-lg: 1670px;
+    --container-sm: 900px;
 }
 
 *,
@@ -73,6 +75,16 @@ select {
 
 .btn.btn-primary {
     background: var(--primary-color);
+}
+
+.alert {
+    max-width: var(--container-sm);
+    padding: 1em;
+    border-radius: var(--radius-sm);
+}
+
+.alert.alert-success {
+    background: var(--sucess-color);
 }
 
 .container {

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\Property;
+
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

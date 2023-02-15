@@ -4,6 +4,12 @@
 {% block body %}
   
 <main class="container property-page">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <h1>{{ property.type.label }}</h1>
     <div class="body">
         <img src="{{ property.image }}" alt="">
@@ -15,33 +21,3 @@
 </main>
   
 {% endblock %}
-
-
-
-
-{# 
-<aside id="modal" class="modal">
-    <div class="modal-body">
-        <form action="{{ path('booking.book') }}"></form>
-    </div>
-</aside>
-
-<script>
-    const modal = document.getElementById('modal')
-    const btns = document.querySelectorAll('.property-item button')
-
-    modal.setAttribute('aria-hidden', 'true')
-
-    btns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            modal.removeAttribute('aria-hidden')
-        })
-    })
-
-
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) {
-            modal.setAttribute('aria-hidden', 'true')
-        }
-    })
-</script> #}

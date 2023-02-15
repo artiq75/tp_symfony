@@ -35,6 +35,18 @@ class Booking
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $customer_firstname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $customer_lastname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $customer_address = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    private ?Property $property = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -125,6 +137,54 @@ class Booking
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getCustomerFirstname(): ?string
+    {
+        return $this->customer_firstname;
+    }
+
+    public function setCustomerFirstname(string $customer_firstname): self
+    {
+        $this->customer_firstname = $customer_firstname;
+
+        return $this;
+    }
+
+    public function getCustomerLastname(): ?string
+    {
+        return $this->customer_lastname;
+    }
+
+    public function setCustomerLastname(string $customer_lastname): self
+    {
+        $this->customer_lastname = $customer_lastname;
+
+        return $this;
+    }
+
+    public function getCustomerAddress(): ?string
+    {
+        return $this->customer_address;
+    }
+
+    public function setCustomerAddress(string $customer_address): self
+    {
+        $this->customer_address = $customer_address;
+
+        return $this;
+    }
+
+    public function getProperty(): ?Property
+    {
+        return $this->property;
+    }
+
+    public function setProperty(?Property $property): self
+    {
+        $this->property = $property;
 
         return $this;
     }
