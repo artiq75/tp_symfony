@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+  
+<main class="container property-page">
+    <h1>{{ property.type.label }}</h1>
+    <div class="body">
+        <img src="{{ property.image }}" alt="">
+        <section>
+            <h2>Réserver</h2>
+            {{ render(path('booking.book', {id: property.id})) }}
+        </section>
+    </div>
+</main>
+  
+{% endblock %}
+
+
+
+
+{# 
+<aside id="modal" class="modal">
+    <div class="modal-body">
+        <form action="{{ path('booking.book') }}"></form>
+    </div>
+</aside>
+
+<script>
+    const modal = document.getElementById('modal')
+    const btns = document.querySelectorAll('.property-item button')
+
+    modal.setAttribute('aria-hidden', 'true')
+
+    btns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            modal.removeAttribute('aria-hidden')
+        })
+    })
+
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.setAttribute('aria-hidden', 'true')
+        }
+    })
+</script> #}

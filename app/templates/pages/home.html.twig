@@ -1,5 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Accueil</h1>
+<main class="container">
+    <ul class="property-items">
+        {% for property in properties %}
+            <li>
+                <article class="property-item">
+                    <img src="{{ property.image }}" alt="">
+                    <h2>{{ property.type.label }}</h2>
+                    <h3>{{ property.type.formatedPrice }} €</h3>
+                    <a href="{{ path('property.show', {id: property.id}) }}" class="btn btn-primary">
+                        Réserver
+                    </a>
+                </article>
+            </li>
+        {% endfor %}
+    </ul>
+</main>
 {% endblock %}
