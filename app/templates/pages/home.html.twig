@@ -2,6 +2,13 @@
 
 {% block body %}
 <main class="container">
+
+    {% for message in app.flashes('success') %}
+        <p class="alert alert-danger">
+            {{ message }}
+        </p>
+    {% endfor %}
+
     <ul class="property-items">
         {% for property in properties %}
             <li>

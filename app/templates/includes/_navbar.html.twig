@@ -3,4 +3,12 @@
     <a href="{{ path('home') }}">l'Espadrille Volante</a>
     <a href="{{ path('admin.property.index') }}">Biens</a>
   </nav>
+
+  <p>
+    {% if not app.user %}
+      <a href="{{ path('login') }}">Louer</a>
+    {% else %}
+      <a href="{{ path('logout') }}">Se deconnecter</a>
+    {% endif %}
+  </p>
 </header>

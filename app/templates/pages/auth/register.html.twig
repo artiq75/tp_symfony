@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <main class="container">
+    
+        {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        {{ form_widget(form) }}
+
+        <p>
+            <a href="{{ path('login') }}">Déjà partenaire ?</a>
+        </p>
+
+        <button type="submit" class="btn btn-primary">Devenir partenaire</button>
+
+        {{ form_end(form) }}
+        
+    </main>
+    
+{% endblock %}

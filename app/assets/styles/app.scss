@@ -124,6 +124,10 @@ table img {
     background: var(--sucess-color);
 }
 
+.alert.alert-danger {
+    background: var(--danger-color);
+}
+
 .container {
     max-width: var(--container-lg);
     margin-left: auto;
