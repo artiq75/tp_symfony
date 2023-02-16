@@ -43,6 +43,19 @@ class Invoice
     #[ORM\Column]
     private ?int $total = null;
 
+    #[ORM\Column(options: [
+        'default' => false
+    ])]
+    private ?bool $is_cancel = false;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTimeImmutable());
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +126,11 @@ class Invoice
         return $this->customer_lastname;
     }
 
+    public function getCustomerFullName(): string
+    {
+        return $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
+    }
+
     public function setCustomerLastname(string $customer_lastname): self
     {
         $this->customer_lastname = $customer_lastname;
@@ -164,6 +182,35 @@ class Invoice
     public function setTotal(int $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getFormatedTotal(): string
+    {
+        return number_format($this->total / 100, 0, '', ' ');
+    }
+
+    public function isIsCancel(): ?bool
+    {
+        return $this->is_cancel;
+    }
+
+    public function setIsCancel(bool $is_cancel): self
+    {
+        $this->is_cancel = $is_cancel;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

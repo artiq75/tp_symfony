@@ -21,6 +21,18 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
+    /**
+     * @return Invoice[]
+     */
+    public function findAllNotCancel(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.is_cancel = 0')
+            ->orderBy('i.created_at')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(Invoice $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

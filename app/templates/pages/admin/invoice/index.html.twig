@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  
+  <main class="container">
+      <h1>Factures</h1>
+
+      {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+
+      {% if invoices is empty %}
+        <h2>Il n'y a aucune factures pour le moment</h2>
+      {% else %}
+        <table>
+          <thead>
+            <tr>
+              <th>Entreprise</th>
+              <th>Adresse Entreprise</th>
+              <th>Locataire</th>
+              <th>Adresse Locataire</th>
+              <th>Total</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for invoice in invoices %}
+              <tr>
+                <td>{{ invoice.companyName }}</td>
+                <td>{{ invoice.companyAddress }}</td>
+                <td>{{ invoice.customerFullName }}</td>
+                <td>{{ invoice.customerAddress }}</td>
+                <td>{{ invoice.formatedTotal }} €</td>
+                <td>
+                  <div class="flex gap1">
+                    {{ include('includes/_delete_form.html.twig', {
+                      action: path('admin.invoice.cancel', {id: invoice.id}),
+                      entity: invoice,
+                      button_label: 'Annuler'
+                    }) }}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+  </main>
+
+{% endblock %}

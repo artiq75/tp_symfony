@@ -1,14 +1,36 @@
-<header>
-  <nav class="container">
+<header class="navbar">
+
+  <nav class="container navbar-nav">
+
     <a href="{{ path('home') }}">l'Espadrille Volante</a>
-    <a href="{{ path('admin.property.index') }}">Biens</a>
+
+
+    {% if app.user %}
+      <p>
+        {% if not is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('admin.property.index') }}">Planifications</a>
+        {% else %}
+          <a href="{{ path('admin.booking.index') }}">Réservations</a>
+          <a href="{{ path('admin.property.index') }}">Biens</a>
+          <a href="{{ path('admin.invoice.index') }}">Facturations</a>
+        {% endif %}
+
+      </p>
+    {% endif %}
+
+    <p>
+      {% if not app.user %}
+
+        <a href="{{ path('login') }}">Louer un bien</a>
+        <a href="{{ path('register') }}">Devenir partenaire</a>
+
+      {% else %}
+          
+        <a class="btn btn-danger" href="{{ path('logout') }}">Se deconnecter</a>
+
+      {% endif %}
+    </p>
+
   </nav>
 
-  <p>
-    {% if not app.user %}
-      <a href="{{ path('login') }}">Louer</a>
-    {% else %}
-      <a href="{{ path('logout') }}">Se deconnecter</a>
-    {% endif %}
-  </p>
 </header>

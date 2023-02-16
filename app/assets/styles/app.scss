@@ -126,6 +126,7 @@ table img {
 
 .alert.alert-danger {
     background: var(--danger-color);
+    color: var(--white);
 }
 
 .container {
@@ -147,6 +148,21 @@ table img {
 
 .property-item img {
     border-radius: var(--radius);
+}
+
+.navbar {
+    padding: 1em;
+    box-shadow: var(--shadow);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (min-width: 700px) {

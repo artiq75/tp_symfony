@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  
+  <main class="container">
+      <h1>Réservations</h1>
+
+      {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+
+      {% if bookings is empty %}
+        <h2>Il n'y a aucune réservation pour le moment</h2>
+      {% else %}
+        <table>
+          <thead>
+            <tr>
+              <th>Vignette</th>
+              <th>Bien</th>
+              <th>Début disponibilité</th>
+              <th>Fin disponibilité</th>
+              <th>Arrvier</th>
+              <th>Départ</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in bookings %}
+              <tr>
+                <td>
+                  {% if booking.property.imageFile %}
+                    <img src="{{ vich_uploader_asset(booking.property) }}" alt="">
+                  {% else %}
+                    <img src="{{ booking.property.imageName }}" alt="">
+                  {% endif %}
+                </td>
+                <td>{{ booking.property.type.label }}</td>
+                <td>{{ booking.property.availabilityStart | date('Y-m-d') }}</td>
+                <td>{{ booking.property.availabilityEnd | date('Y-m-d') }}</td>
+                <td>{{ booking.startDate | date('Y-m-d') }}</td>
+                <td>{{ booking.endDate | date('Y-m-d') }}</td>
+                <td>
+                  <div class="flex gap1">
+                    {{ include('includes/_delete_form.html.twig', {
+                      action: path('admin.booking.delete', {id: booking.id}),
+                      entity: booking
+                    }) }}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+  </main>
+
+{% endblock %}

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BookingController extends AbstractController
 {
-  private const TVA = 20;
+  public const TVA = 20;
 
   #[Route('/bien/{id}/reservation', name: 'booking.book')]
   public function book(Property $property, Request $request, ManagerRegistry $doctrine): Response
