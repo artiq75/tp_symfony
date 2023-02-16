@@ -30,7 +30,13 @@
           <tbody>
             {% for property in properties %}
               <tr>
-                <td><img src="{{ vich_uploader_asset(property) }}" alt=""></td>
+                <td>
+                  {% if property.imageFile %}
+                    <img src="{{ vich_uploader_asset(property) }}" alt="">
+                  {% else %}
+                    <img src="{{ property.imageName }}" alt="">
+                  {% endif %}
+                </td>
                 <td>{{ property.type.label }}</td>
                 <td>{{ property.type.formatedPrice }} €</td>
                 <td>{{ property.availabilityStart | date('Y-m-d') }}</td>

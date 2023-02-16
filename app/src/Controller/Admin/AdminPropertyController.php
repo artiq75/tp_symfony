@@ -22,19 +22,28 @@ class AdminPropertyController extends AbstractController
   #[Route('/biens', name: 'admin.property.index', methods: ['GET'])]
   public function index(): Response
   {
+    $properties = $this->propertyRepository->findAll();
+
+    if (!$this->isGranted('ROLE_ADMIN')) {
+      $properties = $this->propertyRepository->findAllByOwner($this->getUser());
+    }
+
     return $this->render('pages/admin/property/index.html.twig', [
-      'properties' => $this->propertyRepository->findAll()
+      'properties' => $properties
     ]);
   }
 
   #[Route('/biens/creation', name: 'admin.property.new', methods: ['GET', 'POST'])]
   public function new(Request $request): Response
   {
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
     $property = new Property();
     $form = $this->createForm(PropertyType::class, $property);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      $property->setOwner($this->getUser());
       $this->propertyRepository->save($property, true);
       $this->addFlash('success', 'Bien ajouter avec succès');
       return $this->redirectToRoute('admin.property.index');
@@ -66,6 +75,8 @@ class AdminPropertyController extends AbstractController
   #[Route('/biens/{id}', name: 'admin.property.delete', methods: ['POST'])]
   public function delete(Property $property, Request $request): Response
   {
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    
     if ($this->isCsrfTokenValid('delete' . $property->getId(), $request->request->get('_token'))) {
       $this->propertyRepository->remove($property, true);
       $this->addFlash('success', 'Bien supprimer avec succès');

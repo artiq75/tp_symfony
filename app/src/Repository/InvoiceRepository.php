@@ -28,7 +28,7 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('i')
             ->where('i.is_cancel = 0')
-            ->orderBy('i.created_at')
+            ->orderBy('i.created_at', 'desc')
             ->getQuery()
             ->getResult();
     }

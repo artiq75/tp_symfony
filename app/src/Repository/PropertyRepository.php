@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Property>
@@ -19,6 +21,30 @@ class PropertyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Property::class);
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.created_at', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function findAllByOwner(UserInterface $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.owner', 'o', Join::WITH, 'o.id = :id')
+            ->orderBy('p.created_at', 'desc')
+            ->setParameter('id', $user->getId())
+            ->getQuery()
+            ->getResult();
     }
 
     public function save(Property $entity, bool $flush = false): void
