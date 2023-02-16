@@ -22,7 +22,7 @@ class AdminInvoiceController extends AbstractController
   public function index(): Response
   {
     return $this->render('pages/admin/invoice/index.html.twig', [
-      'invoices' => $this->repository->findAllNotCancel()
+      'invoices' => $this->repository->findAll()
     ]);
   }
 

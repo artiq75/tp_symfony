@@ -40,21 +40,13 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
              */
             $booking = $this->faker->randomElement($this->bookingRepository->findAll());
 
-            $persons = $booking->getAdults() + $booking->getChildren();
-            $priceTTC = $booking->getProperty()->getType()->getPrice() * $persons;
-            $priceHT = $priceTTC * 100 / (100 + BookingController::TVA);
-            
             $invoice
               ->setCompanyName("Espadrille Volante")
               ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
-              ->setCompanySiret('83410482000016')
-              ->setCompanyTva('FR40834104820')
-              ->setCustomerFirstname($booking->getCustomerFirstname())
-              ->setCustomerLastname($booking->getCustomerLastname())
+              ->setCustomerName($booking->getCustomerFullName())
               ->setCustomerAddress($booking->getCustomerAddress())
-              ->setPriceTtc($priceTTC)
-              ->setPriceHt($priceHT)
-              ->setTotal($priceHT)
+              ->setTva(20)
+              ->setIsCancel(false)
               ->setUuid(uniqid());
 
               $manager->persist($invoice);

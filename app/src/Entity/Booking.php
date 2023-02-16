@@ -49,13 +49,9 @@ class Booking
     #[ORM\ManyToOne(inversedBy: 'bookings', cascade: ['remove'])]
     private ?Property $property = null;
 
-    #[ORM\ManyToMany(targetEntity: Tax::class, mappedBy: 'bookings')]
-    private Collection $taxes;
-
     public function __construct()
     {
         $this->created_at = new \DateTime();
-        $this->taxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,33 +192,6 @@ class Booking
     public function setProperty(?Property $property): self
     {
         $this->property = $property;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Tax>
-     */
-    public function getTaxes(): Collection
-    {
-        return $this->taxes;
-    }
-
-    public function addTax(Tax $tax): self
-    {
-        if (!$this->taxes->contains($tax)) {
-            $this->taxes->add($tax);
-            $tax->addBooking($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTax(Tax $tax): self
-    {
-        if ($this->taxes->removeElement($tax)) {
-            $tax->removeBooking($this);
-        }
 
         return $this;
     }

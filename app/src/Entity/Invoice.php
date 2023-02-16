@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
@@ -14,48 +16,37 @@ class Invoice
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $company_name = null;
+    private ?string $companyName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $company_address = null;
+    private ?string $companyAddress = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $company_siret = null;
+    private ?string $customerName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $company_tva = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $customer_firstname = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $customer_lastname = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $customer_address = null;
-
-    #[ORM\Column]
-    private ?int $price_ttc = null;
-
-    #[ORM\Column]
-    private ?int $price_ht = null;
-
-    #[ORM\Column]
-    private ?int $total = null;
-
-    #[ORM\Column(options: [
-        'default' => false
-    ])]
-    private ?bool $is_cancel = false;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?string $customerAddress = null;
 
     #[ORM\Column(length: 255)]
     private ?string $uuid = null;
 
+    #[ORM\Column]
+    private ?int $tva = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: InvoiceLine::class, cascade: ['persist', 'remove'])]
+    private Collection $invoiceLines;
+
+    #[ORM\Column(options: [
+        'default' => false
+    ])]
+    private ?bool $isCancel = false;
+
     public function __construct()
     {
+        $this->invoiceLines = new ArrayCollection();
         $this->setCreatedAt(new \DateTimeImmutable());
     }
 
@@ -66,154 +57,48 @@ class Invoice
 
     public function getCompanyName(): ?string
     {
-        return $this->company_name;
+        return $this->companyName;
     }
 
-    public function setCompanyName(string $company_name): self
+    public function setCompanyName(string $companyName): self
     {
-        $this->company_name = $company_name;
+        $this->companyName = $companyName;
 
         return $this;
     }
 
     public function getCompanyAddress(): ?string
     {
-        return $this->company_address;
+        return $this->companyAddress;
     }
 
-    public function setCompanyAddress(string $company_address): self
+    public function setCompanyAddress(string $companyAddress): self
     {
-        $this->company_address = $company_address;
+        $this->companyAddress = $companyAddress;
 
         return $this;
     }
 
-    public function getCompanySiret(): ?string
+    public function getCustomerName(): ?string
     {
-        return $this->company_siret;
+        return $this->customerName;
     }
 
-    public function setCompanySiret(string $company_siret): self
+    public function setCustomerName(string $customerName): self
     {
-        $this->company_siret = $company_siret;
-
-        return $this;
-    }
-
-    public function getCompanyTva(): ?string
-    {
-        return $this->company_tva;
-    }
-
-    public function setCompanyTva(string $company_tva): self
-    {
-        $this->company_tva = $company_tva;
-
-        return $this;
-    }
-
-    public function getCustomerFirstname(): ?string
-    {
-        return $this->customer_firstname;
-    }
-
-    public function setCustomerFirstname(string $customer_firstname): self
-    {
-        $this->customer_firstname = $customer_firstname;
-
-        return $this;
-    }
-
-    public function getCustomerLastname(): ?string
-    {
-        return $this->customer_lastname;
-    }
-
-    public function getCustomerFullName(): string
-    {
-        return $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
-    }
-
-    public function setCustomerLastname(string $customer_lastname): self
-    {
-        $this->customer_lastname = $customer_lastname;
+        $this->customerName = $customerName;
 
         return $this;
     }
 
     public function getCustomerAddress(): ?string
     {
-        return $this->customer_address;
+        return $this->customerAddress;
     }
 
-    public function setCustomerAddress(string $customer_address): self
+    public function setCustomerAddress(string $customerAddress): self
     {
-        $this->customer_address = $customer_address;
-
-        return $this;
-    }
-
-    public function getPriceTtc(): ?int
-    {
-        return $this->price_ttc;
-    }
-
-    public function setPriceTtc(int $price_ttc): self
-    {
-        $this->price_ttc = $price_ttc;
-
-        return $this;
-    }
-
-    public function getPriceHt(): ?int
-    {
-        return $this->price_ht;
-    }
-
-    public function setPriceHt(int $price_ht): self
-    {
-        $this->price_ht = $price_ht;
-
-        return $this;
-    }
-
-    public function getTotal(): ?int
-    {
-        return $this->total;
-    }
-
-    public function setTotal(int $total): self
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    public function getFormatedTotal(): string
-    {
-        return number_format($this->total / 100, 0, '', ' ');
-    }
-
-    public function isIsCancel(): ?bool
-    {
-        return $this->is_cancel;
-    }
-
-    public function setIsCancel(bool $is_cancel): self
-    {
-        $this->is_cancel = $is_cancel;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
-    {
-        $this->created_at = $created_at;
+        $this->customerAddress = $customerAddress;
 
         return $this;
     }
@@ -226,6 +111,72 @@ class Invoice
     public function setUuid(string $uuid): self
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getTva(): ?int
+    {
+        return $this->tva;
+    }
+
+    public function setTva(int $tva): self
+    {
+        $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InvoiceLine>
+     */
+    public function getInvoiceLines(): Collection
+    {
+        return $this->invoiceLines;
+    }
+
+    public function addInvoiceLine(InvoiceLine $invoiceLine): self
+    {
+        if (!$this->invoiceLines->contains($invoiceLine)) {
+            $this->invoiceLines->add($invoiceLine);
+            $invoiceLine->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoiceLine(InvoiceLine $invoiceLine): self
+    {
+        if ($this->invoiceLines->removeElement($invoiceLine)) {
+            // set the owning side to null (unless already changed)
+            if ($invoiceLine->getInvoice() === $this) {
+                $invoiceLine->setInvoice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isIsCancel(): ?bool
+    {
+        return $this->isCancel;
+    }
+
+    public function setIsCancel(bool $isCancel): self
+    {
+        $this->isCancel = $isCancel;
 
         return $this;
     }

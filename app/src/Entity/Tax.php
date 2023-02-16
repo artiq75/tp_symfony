@@ -3,13 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\TaxRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TaxRepository::class)]
 class Tax
 {
+    public const TAX_STAY_SLUG = 'taxe-sejour';
+    
+    public const TAX_POOL_SLUG = 'taxe-piscine';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,19 +20,14 @@ class Tax
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-    #[ORM\Column]
-    private ?int $child_rate = null;
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     #[ORM\Column]
-    private ?int $adult_rate = null;
+    private ?int $childRate = null;
 
-    #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'taxes')]
-    private Collection $bookings;
-
-    public function __construct()
-    {
-        $this->bookings = new ArrayCollection();
-    }
+    #[ORM\Column]
+    private ?int $adultRate = null;
 
     public function getId(): ?int
     {
@@ -49,50 +46,38 @@ class Tax
         return $this;
     }
 
-    public function getChildRate(): ?int
+    public function getSlug(): ?string
     {
-        return $this->child_rate;
+        return $this->slug;
     }
 
-    public function setChildRate(int $child_rate): self
+    public function setSlug(string $slug): self
     {
-        $this->child_rate = $child_rate;
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getChildRate(): ?int
+    {
+        return $this->childRate;
+    }
+
+    public function setChildRate(int $childRate): self
+    {
+        $this->childRate = $childRate;
 
         return $this;
     }
 
     public function getAdultRate(): ?int
     {
-        return $this->adult_rate;
+        return $this->adultRate;
     }
 
-    public function setAdultRate(int $adult_rate): self
+    public function setAdultRate(int $adultRate): self
     {
-        $this->adult_rate = $adult_rate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Booking>
-     */
-    public function getBookings(): Collection
-    {
-        return $this->bookings;
-    }
-
-    public function addBookings(Booking $bookings): self
-    {
-        if (!$this->bookings->contains($bookings)) {
-            $this->bookings->add($bookings);
-        }
-
-        return $this;
-    }
-
-    public function removeBookings(Booking $bookings): self
-    {
-        $this->bookings->removeElement($bookings);
+        $this->adultRate = $adultRate;
 
         return $this;
     }

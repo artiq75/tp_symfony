@@ -5,17 +5,26 @@ namespace App\Controller;
 use App\Entity\Alert;
 use App\Entity\Booking;
 use App\Entity\Invoice;
+use App\Entity\InvoiceLine;
 use App\Entity\Property;
+use App\Entity\Tax;
+use App\Event\BookingBookEvent;
 use App\Form\BookingType;
+use App\Repository\TaxRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class BookingController extends AbstractController
 {
-  public const TVA = 20;
+  public function __construct(
+    private EventDispatcherInterface $dispatcher
+  )
+  {
+  }
 
   #[Route('/bien/{id}/reservation', name: 'booking.book')]
   public function book(Property $property, Request $request, ManagerRegistry $doctrine): Response
@@ -30,50 +39,11 @@ class BookingController extends AbstractController
     ]);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-      $invoice = new Invoice();
-      $now = new \DateTime();
-
-      $persons = $booking->getAdults() + $booking->getChildren();
-      $priceTTC = $property->getType()->getPrice() * $persons;
-      $priceHT = $priceTTC * 100 / (100 + self::TVA);
-
-      $invoice
-        ->setCompanyName("Espadrille Volante")
-        ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
-        ->setCompanySiret('83410482000016')
-        ->setCompanyTva('FR40834104820')
-        ->setCustomerFirstname($booking->getCustomerFirstname())
-        ->setCustomerLastname($booking->getCustomerLastname())
-        ->setCustomerAddress($booking->getCustomerAddress())
-        ->setPriceTtc($priceTTC)
-        ->setPriceHt($priceHT)
-        ->setTotal($priceHT)
-        ->setUuid(uniqid());
-
+    if ($form->isSubmitted() && $form->isValid()) {      
       $booking->setProperty($property);
 
-      $alert = new Alert();
-      $alert
-        ->setTitle('Vous devez imprimer la facture numéro: ' . $invoice->getUuid())
-        ->setPublishedAt($now->add(new \DateInterval('P3Y')));
-      $em->persist($alert);
-
-      $alert = new Alert();
-      $publishedAt = null;
-
-      if (!$booking->isGrantAccess()) {
-        $publishedAt = $now->add(new \DateInterval('P7D'));
-      } else {
-        $publishedAt = $now->add(new \DateInterval('P1Y'));
-      }
-
-      $alert
-        ->setTitle('Vous devez supprimer les informations du locataire: ' . $booking->getCustomerFullName())
-        ->setPublishedAt($publishedAt);
-      $em->persist($alert);
-
-      $em->persist($invoice);
+      $this->dispatcher->dispatch(new BookingBookEvent($booking), BookingBookEvent::NAME);
+      
       $em->persist($booking);
       $em->flush();
 
