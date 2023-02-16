@@ -165,6 +165,11 @@ class Booking
         return $this;
     }
 
+    public function getCustomerFullName(): string
+    {
+        return $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
+    }
+
     public function getCustomerAddress(): ?string
     {
         return $this->customer_address;

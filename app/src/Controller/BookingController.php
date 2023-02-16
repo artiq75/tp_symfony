@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
 use App\Entity\Booking;
 use App\Entity\Invoice;
 use App\Entity\Property;
@@ -35,7 +36,7 @@ class BookingController extends AbstractController
       $persons = $booking->getAdults() + $booking->getChildren();
       $priceTTC = $property->getType()->getPrice() * $persons;
       $priceHT = $priceTTC * 100 / (100 + self::TVA);
-      
+
       $invoice
         ->setCompanyName("Espadrille Volante")
         ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
@@ -50,6 +51,22 @@ class BookingController extends AbstractController
 
       $booking->setProperty($property);
 
+      $notification = new Alert();
+
+      $now = new \DateTime();
+      $publishedAt = null;
+
+      if (!$booking->isGrantAccess()) {
+        $publishedAt = $now->add(new \DateInterval('P7D'));
+      } else {
+        $publishedAt = $now->add(new \DateInterval('P1Y'));
+      }
+
+      $notification
+        ->setTitle('Vous devez supprimer la réservation du locataire: ' . $booking->getCustomerFullName())
+        ->setPublishedAt($publishedAt);
+
+      $em->persist($notification);
       $em->persist($booking);
       $em->persist($invoice);
       $em->flush();

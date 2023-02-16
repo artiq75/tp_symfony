@@ -25,8 +25,16 @@
         <a href="{{ path('register') }}">Devenir partenaire</a>
 
       {% else %}
-          
-        <a class="btn btn-danger" href="{{ path('logout') }}">Se deconnecter</a>
+        
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="{{ path('alert.index') }}">
+            <i class="fa-solid fa-bell"></i>
+          </a>
+        {% endif %}
+        
+        <a class="btn btn-danger" href="{{ path('logout') }}">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
 
       {% endif %}
     </p>

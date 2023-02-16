@@ -1,6 +1,6 @@
 :root {
     --primary-color: orange;
-    --sucess-color: #00ff55;
+    --success-color: #00ff55;
     --danger-color: #ff1100;
     --info-color: #00d9ff;
     --white: white;
@@ -76,6 +76,10 @@ table img {
     height: 120px;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .w-100 {
     min-width: 100%;
 }
@@ -93,6 +97,11 @@ table img {
 
 .btn.btn-primary {
     background: var(--primary-color);
+}
+
+.btn.btn-success {
+    background: var(--success-color);
+    color: var(--white);
 }
 
 .btn.btn-danger {
@@ -118,10 +127,11 @@ table img {
     margin-left: auto;
     margin-right: auto;
     padding: 1em;
+    box-shadow: var(--shadow);
 }
 
 .alert.alert-success {
-    background: var(--sucess-color);
+    background: var(--success-color);
 }
 
 .alert.alert-danger {
@@ -163,6 +173,21 @@ table img {
 .navbar-nav {
     display: flex;
     justify-content: space-between;
+}
+
+.alert-items *:not(:last-child) {
+    margin-bottom: var(--gap);
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.alert-item__actions {
+    display: flex;
+    gap: var(--gap);
 }
 
 @media (min-width: 700px) {
