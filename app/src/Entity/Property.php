@@ -44,7 +44,7 @@ class Property
     #[ORM\Column(nullable: true, type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'properties')]
+    #[ORM\ManyToOne(inversedBy: 'properties', cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 

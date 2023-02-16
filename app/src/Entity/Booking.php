@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,12 +46,16 @@ class Booking
     #[ORM\Column(length: 255)]
     private ?string $customer_address = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\ManyToOne(inversedBy: 'bookings', cascade: ['remove'])]
     private ?Property $property = null;
+
+    #[ORM\ManyToMany(targetEntity: Tax::class, mappedBy: 'bookings')]
+    private Collection $taxes;
 
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->taxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,6 +196,33 @@ class Booking
     public function setProperty(?Property $property): self
     {
         $this->property = $property;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tax>
+     */
+    public function getTaxes(): Collection
+    {
+        return $this->taxes;
+    }
+
+    public function addTax(Tax $tax): self
+    {
+        if (!$this->taxes->contains($tax)) {
+            $this->taxes->add($tax);
+            $tax->addBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTax(Tax $tax): self
+    {
+        if ($this->taxes->removeElement($tax)) {
+            $tax->removeBooking($this);
+        }
 
         return $this;
     }

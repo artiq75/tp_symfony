@@ -26,7 +26,7 @@ class AlertFixtures extends Fixture
             ->setTitle($this->faker->sentence())
             ->setPublishedAt(new \DateTime());
 
-            $manager->persist($alert);
+            // $manager->persist($alert);
         }
 
         $manager->flush();

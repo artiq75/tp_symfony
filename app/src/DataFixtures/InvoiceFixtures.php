@@ -54,7 +54,8 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
               ->setCustomerAddress($booking->getCustomerAddress())
               ->setPriceTtc($priceTTC)
               ->setPriceHt($priceHT)
-              ->setTotal($priceHT);
+              ->setTotal($priceHT)
+              ->setUuid(uniqid());
 
               $manager->persist($invoice);
         }

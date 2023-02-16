@@ -32,6 +32,7 @@ class BookingController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
       $invoice = new Invoice();
+      $now = new \DateTime();
 
       $persons = $booking->getAdults() + $booking->getChildren();
       $priceTTC = $property->getType()->getPrice() * $persons;
@@ -47,13 +48,18 @@ class BookingController extends AbstractController
         ->setCustomerAddress($booking->getCustomerAddress())
         ->setPriceTtc($priceTTC)
         ->setPriceHt($priceHT)
-        ->setTotal($priceHT);
+        ->setTotal($priceHT)
+        ->setUuid(uniqid());
 
       $booking->setProperty($property);
 
-      $notification = new Alert();
+      $alert = new Alert();
+      $alert
+        ->setTitle('Vous devez imprimer la facture numéro: ' . $invoice->getUuid())
+        ->setPublishedAt($now->add(new \DateInterval('P3Y')));
+      $em->persist($alert);
 
-      $now = new \DateTime();
+      $alert = new Alert();
       $publishedAt = null;
 
       if (!$booking->isGrantAccess()) {
@@ -62,13 +68,13 @@ class BookingController extends AbstractController
         $publishedAt = $now->add(new \DateInterval('P1Y'));
       }
 
-      $notification
-        ->setTitle('Vous devez supprimer la réservation du locataire: ' . $booking->getCustomerFullName())
+      $alert
+        ->setTitle('Vous devez supprimer les informations du locataire: ' . $booking->getCustomerFullName())
         ->setPublishedAt($publishedAt);
+      $em->persist($alert);
 
-      $em->persist($notification);
-      $em->persist($booking);
       $em->persist($invoice);
+      $em->persist($booking);
       $em->flush();
 
       $this->addFlash('success', 'Réservation prise en compte!');

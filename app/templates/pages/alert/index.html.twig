@@ -4,28 +4,32 @@
   
   <main class="container">
 
-    <h1 class="text-center">Toute les Alertes</h1>
-  
-    <ul class="alert-items">
-    
-      {% for alert in alerts %}
-        <li class="alert alert-item">
-          <p><strong>{{ alert.title }}</strong></p>
-          <div class="alert-item__actions">
-            {% if not alert.isSeen %}
-              <a href="{{ path('alert.seen', {id: alert.id}) }}" class="btn btn-success">
-                <i class="fa-solid fa-check"></i>
-              </a>
-            {% endif %}
-            {{ include('includes/_delete_form.html.twig', {
-              action: path('alert.delete', {id: alert.id}),
-              entity: alert
-            }) }}
-          </div>
-        </li>
-      {% endfor %}
-    
-    </ul>
+    {% if alerts is empty %}
+      <h1 class="text-center">Aucune alertes pour le moment</h1>
+    {% else %}
+      <h1 class="text-center">Toute les Alertes</h1>
+
+      <ul class="alert-items">
+      
+        {% for alert in alerts %}
+          <li class="alert alert-item">
+            <p><strong>{{ alert.title }}</strong></p>
+            <div class="alert-item__actions">
+              {% if not alert.isSeen %}
+                <a href="{{ path('alert.seen', {id: alert.id}) }}" class="btn btn-success">
+                  <i class="fa-solid fa-check"></i>
+                </a>
+              {% endif %}
+              {{ include('includes/_delete_form.html.twig', {
+                action: path('alert.delete', {id: alert.id}),
+                entity: alert
+              }) }}
+            </div>
+          </li>
+        {% endfor %}
+      
+      </ul>
+    {% endif %}
 
   </main>
 
