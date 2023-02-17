@@ -13,7 +13,11 @@
       
         {% for alert in alerts %}
           <li class="alert alert-item">
-            <p><strong>{{ alert.title }}</strong></p>
+            <p>
+              <strong>{{ alert.title }}</strong>
+              <br>
+              <span>{{ alert.publishedAt | date('Y-m-d') }}</span>
+            </p>
             <div class="alert-item__actions">
               {% if not alert.isSeen %}
                 <a href="{{ path('alert.seen', {id: alert.id}) }}" class="btn btn-success">
