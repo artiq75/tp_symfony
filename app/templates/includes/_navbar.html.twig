@@ -27,9 +27,9 @@
       {% else %}
         
         {% if is_granted('ROLE_ADMIN') %}
-          <a href="{{ path('alert.index') }}">
-            <i class="fa-solid fa-bell"></i>
-          </a>
+          {{ render(controller(
+            'App\\Controller\\AlertController::alert'
+          )) }}
         {% endif %}
         
         <a class="btn btn-danger" href="{{ path('logout') }}">

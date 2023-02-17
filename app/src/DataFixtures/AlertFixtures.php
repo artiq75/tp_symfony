@@ -19,14 +19,15 @@ class AlertFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $alert = new Alert();
 
             $alert
             ->setTitle($this->faker->sentence())
+            ->setIsSeen($this->faker->boolean())
             ->setPublishedAt(new \DateTime());
 
-            // $manager->persist($alert);
+            $manager->persist($alert);
         }
 
         $manager->flush();

@@ -44,4 +44,11 @@ class AlertController extends AbstractController
     
     return $this->redirectToRoute('alert.index');
   }
+
+  public function alert(): Response
+  {
+    return $this->render('includes/_alert.html.twig', [
+      'has_new_alerts' => !empty($this->repository->findAllNotSeen())
+    ]);
+  }
 }

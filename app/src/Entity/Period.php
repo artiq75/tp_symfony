@@ -22,7 +22,7 @@ class Period
     ],
     'end' => [
       'days' => 31,
-      'month' => 08
+      'month' => 8
     ]
   ];
 }

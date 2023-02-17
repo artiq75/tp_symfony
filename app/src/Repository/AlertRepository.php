@@ -27,8 +27,19 @@ class AlertRepository extends ServiceEntityRepository
     public function findAll(): array
     {
         return $this->createQueryBuilder('a')
-            ->where('a.publishedAt = CURRENT_DATE()')
+            ->where('a.publishedAt <= CURRENT_DATE()')
             ->orderBy('a.publishedAt', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Alert[]
+     */
+    public function findAllNotSeen(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.publishedAt <= CURRENT_DATE() AND a.is_seen = 0')
             ->getQuery()
             ->getResult();
     }

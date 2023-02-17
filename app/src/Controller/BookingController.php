@@ -47,9 +47,20 @@ class BookingController extends AbstractController
 
       $this->dispatcher->dispatch(new BookingBookEvent($booking, $doctrine), BookingBookEvent::NAME);
 
-      $stayTax = $this->taxRepository->findOneBy([
-        'slug' => Tax::TAX_STAY_SLUG
-      ]);
+      $stayTax = $this->taxRepository->findOneBy(['slug' => Tax::TAX_STAY_SLUG]);
+
+      $price = $booking->getProperty()->getType()->getPrice();
+
+      $now = new \DateTime();
+
+      if (
+        $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
+        $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
+        $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
+        $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
+      ) {
+        $price = $price + ($price * 15 / 100);
+      }
 
       $stayChildTax = $stayTax->getChildRate() * $booking->getChildren();
       $stayAdultTax = $stayTax->getAdultRate() * $booking->getAdults();
@@ -67,19 +78,17 @@ class BookingController extends AbstractController
         $price = $price + $poolChildTax + $poolAdultTax;
       }
 
-      $now = new \DateTime();
-
-      if (
-        $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
-        $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
-        $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
-        $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
-      ) {
-        $difference = $booking->getEndDate()->getTimestamp() - $booking->getStartDate()->getTimestamp();
-        $numberWeek = $difference / 7;
-        $price = $price - 1.05;
-        $price = $price - ($price * 15 / 100);
-      }
+      // if (
+      //   $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
+      //   $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
+      //   $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
+      //   $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
+      // ) {
+      //   $difference = $booking->getEndDate()->getTimestamp() - $booking->getStartDate()->getTimestamp();
+      //   $numberWeek = $difference / 7;
+      //   $price = $price - 1.05;
+      //   $price = $price - ($price * 15 / 100);
+      // }
 
       $invoice = new Invoice();
       $invoice
