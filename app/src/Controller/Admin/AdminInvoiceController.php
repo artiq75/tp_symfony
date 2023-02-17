@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Invoice;
 use App\Repository\InvoiceRepository;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,5 +38,18 @@ class AdminInvoiceController extends AbstractController
     }
 
     return $this->redirectToRoute('admin.invoice.index');
+  }
+
+  #[Route('/facturations/{id}/pdf', name: 'admin.invoice.pdf', methods: ['GET'])]
+  public function generatePdf(Invoice $invoice, Pdf $pdf): PdfResponse
+  {
+    $html = $this->renderView('pages/admin/invoice/pdf.html.twig', [
+      'invoice' => $invoice
+    ]);
+
+    return new PdfResponse(
+      $pdf->getOutputFromHtml($html),
+      'facture-' . $invoice->getUuid() . '.pdf'
+    );
   }
 }
