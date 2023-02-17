@@ -2,23 +2,23 @@
 
 namespace App\Event;
 
-use App\Entity\Booking;
+use App\Entity\Invoice;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class BookingBookEvent extends Event
+class InvoiceCreateEvent extends Event
 {
-    public const NAME = 'booking.book';
+    public const NAME = 'invoice.create';
 
     public function __construct(
-        protected Booking $booking,
+        protected Invoice $invoice,
         public ManagerRegistry $doctrine
     )
     {
     }
-
-    public function getBooking(): Booking
+    
+    public function getInvoice(): Invoice
     {
-        return $this->booking;
+        return $this->invoice;
     }
 }
