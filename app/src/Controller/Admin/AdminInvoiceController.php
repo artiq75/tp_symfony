@@ -32,7 +32,7 @@ class AdminInvoiceController extends AbstractController
   public function cancel(Invoice $invoice, Request $request): Response
   {
     if ($this->isCsrfTokenValid('delete' . $invoice->getId(), $request->request->get('_token'))) {
-      $invoice->setIsCancel(true);
+      $invoice->setIsActive(false);
       $this->repository->save($invoice, true);
       $this->addFlash('success', 'Annulation de la facture avec succès');
     }

@@ -40,9 +40,9 @@ class Invoice
     private Collection $invoiceLines;
 
     #[ORM\Column(options: [
-        'default' => false
+        'default' => true
     ])]
-    private ?bool $isCancel = false;
+    private ?bool $isActive = true;
 
     public function __construct()
     {
@@ -168,15 +168,15 @@ class Invoice
 
         return $this;
     }
-
-    public function isIsCancel(): ?bool
+    
+    public function isIsActive(): ?bool
     {
-        return $this->isCancel;
+        return $this->isActive;
     }
 
-    public function setIsCancel(bool $isCancel): self
+    public function setIsActive(bool $isActive): self
     {
-        $this->isCancel = $isCancel;
+        $this->isActive = $isActive;
 
         return $this;
     }

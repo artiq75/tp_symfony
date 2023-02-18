@@ -28,7 +28,7 @@ class BookingController extends AbstractController
   {
   }
 
-  #[Route('/bien/{id}/reservation', name: 'booking.book')]
+  #[Route('/bien/{id}/reservation', name: 'booking.book', methods: ['GET', 'POST'])]
   public function book(Property $property, Request $request, ManagerRegistry $doctrine): Response
   {
     $booking = new Booking();
@@ -45,7 +45,7 @@ class BookingController extends AbstractController
       $booking->setProperty($property);
       $manager->persist($booking);
 
-      $this->dispatcher->dispatch(new BookingBookEvent($booking, $doctrine), BookingBookEvent::NAME);
+      $this->dispatcher->dispatch(new BookingBookEvent($booking), BookingBookEvent::NAME);
 
       $stayTax = $this->taxRepository->findOneBy(['slug' => Tax::TAX_STAY_SLUG]);
 
@@ -59,7 +59,17 @@ class BookingController extends AbstractController
         $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
         $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
       ) {
-        $price = $price + ($price * 15 / 100);
+        $price += ($price * 15 / 100);
+
+        $difference = $booking->getEndDate()->getTimestamp() - $booking->getStartDate()->getTimestamp();
+
+        // Calcul nombre de tranche de 7 jours
+        $number7DayBlock = floor($difference / 7);
+        
+        // Réducation 5% par tranche de 7 jours
+        for ($i=0; $i < $number7DayBlock; $i++) { 
+          $price -= (5 / 100);
+        }
       }
 
       $stayChildTax = $stayTax->getChildRate() * $booking->getChildren();
@@ -75,20 +85,8 @@ class BookingController extends AbstractController
         $poolChildTax = $poolTax->getChildRate() * $booking->getChildren();
         $poolAdultTax = $poolTax->getAdultRate() * $booking->getAdults();
 
-        $price = $price + $poolChildTax + $poolAdultTax;
+        $price += $poolChildTax + $poolAdultTax;
       }
-
-      // if (
-      //   $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
-      //   $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
-      //   $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
-      //   $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
-      // ) {
-      //   $difference = $booking->getEndDate()->getTimestamp() - $booking->getStartDate()->getTimestamp();
-      //   $numberWeek = $difference / 7;
-      //   $price = $price - 1.05;
-      //   $price = $price - ($price * 15 / 100);
-      // }
 
       $invoice = new Invoice();
       $invoice
@@ -109,8 +107,6 @@ class BookingController extends AbstractController
 
       $manager->persist($invoice);
       $manager->flush();
-
-      $this->dispatcher->dispatch(new InvoiceCreateEvent($invoice, $doctrine), InvoiceCreateEvent::NAME);
 
       $this->addFlash('success', 'Réservation prise en compte!');
 

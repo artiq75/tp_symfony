@@ -11,8 +11,7 @@ class BookingBookEvent extends Event
     public const NAME = 'booking.book';
 
     public function __construct(
-        protected Booking $booking,
-        public ManagerRegistry $doctrine
+        protected Booking $booking
     )
     {
     }

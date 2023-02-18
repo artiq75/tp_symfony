@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 class Booking
@@ -17,15 +18,19 @@ class Booking
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $children = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $adults = null;
 
     #[ORM\Column]
@@ -38,12 +43,15 @@ class Booking
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $customer_firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $customer_lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $customer_address = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings', cascade: ['remove'])]

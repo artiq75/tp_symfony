@@ -28,7 +28,8 @@ class AlertRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->where('a.publishedAt <= CURRENT_DATE()')
-            ->orderBy('a.publishedAt', 'desc')
+            ->andWhere('a.is_seen = 0')
+            ->orderBy('a.is_seen')
             ->getQuery()
             ->getResult();
     }

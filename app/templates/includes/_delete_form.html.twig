@@ -1,6 +1,10 @@
-<form action="{{ action }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ?')">
+<form action="{{ action }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment ?')">
   <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entity.id) }}">
   <button class="btn btn-danger" type="submit">
-    <i class="fa-regular fa-trash-can"></i>
+    {% if button_label is defined %}
+      {{ button_label  }}
+    {% else %}
+      <i class="fa-regular fa-trash-can"></i> 
+    {% endif %}
   </button>
 </form>

@@ -35,16 +35,6 @@ class AlertController extends AbstractController
     return $this->redirectToRoute('alert.index');
   }
 
-  #[Route('/notifications/{id}', name: 'alert.delete', methods: ['POST'])]
-  public function delete(Alert $alert, Request $request) 
-  {
-    if ($this->isCsrfTokenValid('delete' . $alert->getId(), $request->request->get('_token'))) {
-      $this->repository->remove($alert, true);
-    }
-    
-    return $this->redirectToRoute('alert.index');
-  }
-
   public function alert(): Response
   {
     return $this->render('includes/_alert.html.twig', [

@@ -21,6 +21,18 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
+    /**
+     * @return Invoice[]
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.isActive = 1')
+            ->orderBy('i.createdAt', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(Invoice $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
