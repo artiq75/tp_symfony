@@ -1,24 +1,10 @@
 <header class="navbar">
 
-  <nav class="container navbar-nav">
+  <nav class="navbar-nav">
 
     <a href="{{ path('home') }}">l'Espadrille Volante</a>
 
-
-    {% if app.user %}
-      <p>
-        <a href="{{ path('admin.index') }}">Admin</a>
-      </p>
-    {% endif %}
-
     <p>
-      {% if not app.user %}
-
-        <a href="{{ path('login') }}">Se connecter</a>
-        <a href="{{ path('register') }}">S'inscrire</a>
-
-      {% else %}
-        
         {% if is_granted('ROLE_ADMIN') %}
           {{ render(controller(
             'App\\Controller\\AlertController::alert'
@@ -28,8 +14,6 @@
         <a class="btn btn-danger" href="{{ path('logout') }}">
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </a>
-
-      {% endif %}
     </p>
 
   </nav>

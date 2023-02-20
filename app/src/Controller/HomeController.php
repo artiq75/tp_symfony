@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Property;
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,5 +22,13 @@ class HomeController extends AbstractController
         return $this->render('pages/home.html.twig', [
             'properties' => $this->propertyRepository->findAll()
         ]);
+    }
+
+    #[Route('bien/{id}', name: 'property.show', methods: ['GET'])]
+    public function show(Property $property): Response
+    {
+      return $this->render('pages/property/show.html.twig', [
+        'property' => $property
+      ]);
     }
 }

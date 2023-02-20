@@ -1,52 +1,50 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.base.html.twig' %}
+
+{% block title 'Facturations' %}
 
 {% block body %}
-  
-  <main class="container">
-      <h1>Factures</h1>
 
-      {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
+{% for message in app.flashes('success') %}
+  <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% if invoices is empty %}
+  <h2>Il n'y a aucune factures pour le moment</h2>
+{% else %}
+  <table>
+    <thead>
+      <tr>
+        <th>Entreprise</th>
+        <th>Adresse Entreprise</th>
+        <th>Locataire</th>
+        <th>Adresse Locataire</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in invoices %}
+        <tr>
+          <td>{{ invoice.companyName }}</td>
+          <td>{{ invoice.companyAddress }}</td>
+          <td>{{ invoice.customerName }}</td>
+          <td>{{ invoice.customerAddress }}</td>
+          <td>
+            <div class="flex gap1">
+              <a class="btn btn-info" href="{{ path('admin.invoice.pdf', {id: invoice.id}) }}" title="Ouvrir en pdf">
+                <i class="fa-solid fa-file-pdf"></i>
+              </a>
+              {{ include('includes/_delete_form.html.twig', {
+                action: path('admin.invoice.cancel', {id: invoice.id}),
+                entity: invoice,
+                button_label: 'Annuler'
+              }) }}
+            </div>
+          </td>
+        </tr>
       {% endfor %}
-
-      {% if invoices is empty %}
-        <h2>Il n'y a aucune factures pour le moment</h2>
-      {% else %}
-        <table>
-          <thead>
-            <tr>
-              <th>Entreprise</th>
-              <th>Adresse Entreprise</th>
-              <th>Locataire</th>
-              <th>Adresse Locataire</th>
-              <th>Total</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for invoice in invoices %}
-              <tr>
-                <td>{{ invoice.companyName }}</td>
-                <td>{{ invoice.companyAddress }}</td>
-                <td>{{ invoice.customerName }}</td>
-                <td>{{ invoice.customerAddress }}</td>
-                <td>
-                  <div class="flex gap1">
-                    <a class="btn btn-info" href="{{ path('admin.invoice.pdf', {id: invoice.id}) }}" title="Ouvrir en pdf">
-                      <i class="fa-solid fa-file-pdf"></i>
-                    </a>
-                    {{ include('includes/_delete_form.html.twig', {
-                      action: path('admin.invoice.cancel', {id: invoice.id}),
-                      entity: invoice,
-                      button_label: 'Annuler'
-                    }) }}
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-  </main>
+    </tbody>
+  </table>
+{% endif %}
 
 {% endblock %}

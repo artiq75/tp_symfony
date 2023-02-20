@@ -1,67 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.base.html.twig' %}
+
+{% block title 'Biens' %}
 
 {% block body %}
-  
-  <main class="container">
-      <h1>Tout mes biens</h1>
 
-      {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
+{% for message in app.flashes('success') %}
+  <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% if is_granted('ROLE_ADMIN') %}
+  <a href="{{ path('admin.property.new') }}" class="btn btn-primary mb1">Ajouter un nouveau bien</a>
+{% endif %}
+
+{% if properties is empty %}
+  <h2>Vous n'avez ajouter aucun bien</h2>
+{% else %}
+  <table>
+    <thead>
+      <tr>
+        <th>Vignette</th>
+        <th>Titre</th>
+        <th>Prix</th>
+        <th>Début disponibilité</th>
+        <th>Fin disponibilité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for property in properties %}
+        <tr>
+          <td>
+            {% if property.imageFile %}
+              <img src="{{ vich_uploader_asset(property) }}" alt="">
+            {% else %}
+              <img src="{{ property.imageName }}" alt="">
+            {% endif %}
+          </td>
+          <td>{{ property.type.label }}</td>
+          <td>{{ property.type.formatedPrice }} €</td>
+          <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
+          <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
+          <td>
+            <div class="flex gap1">
+              <a class="btn btn-info" href="{{ path('property.show', {id: property.id}) }}">
+                <i class="fa-solid fa-eye"></i>
+              </a>
+              <a class="btn btn-primary" href="{{ path('admin.property.edit', {id: property.id}) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+              {% if is_granted('ROLE_ADMIN') %}
+                {{ include('includes/_delete_form.html.twig', {
+                action: path('admin.property.delete', {id: property.id}),
+                entity: property
+                }) }}
+              {% endif %}
+            </div>
+          </td>
+        </tr>
       {% endfor %}
-
-      {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin.property.new') }}" class="btn btn-primary">Ajouter un nouveau bien</a>
-      {% endif %}
-
-      {% if properties is empty %}
-        <h2>Vous n'avez ajouter aucun bien</h2>
-      {% else %}
-        <table>
-          <thead>
-            <tr>
-              <th>Vignette</th>
-              <th>Titre</th>
-              <th>Prix</th>
-              <th>Début disponibilité</th>
-              <th>Fin disponibilité</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for property in properties %}
-              <tr>
-                <td>
-                  {% if property.imageFile %}
-                    <img src="{{ vich_uploader_asset(property) }}" alt="">
-                  {% else %}
-                    <img src="{{ property.imageName }}" alt="">
-                  {% endif %}
-                </td>
-                <td>{{ property.type.label }}</td>
-                <td>{{ property.type.formatedPrice }} €</td>
-                <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
-                <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
-                <td>
-                  <div class="flex gap1">
-                    <a class="btn btn-info" href="{{ path('property.show', {id: property.id}) }}">
-                      <i class="fa-solid fa-eye"></i>
-                    </a>
-                    <a class="btn btn-primary" href="{{ path('admin.property.edit', {id: property.id}) }}">
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                      {{ include('includes/_delete_form.html.twig', {
-                      action: path('admin.property.delete', {id: property.id}),
-                      entity: property
-                      }) }}
-                    {% endif %}
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-  </main>
+    </tbody>
+  </table>
+{% endif %}
 
 {% endblock %}
