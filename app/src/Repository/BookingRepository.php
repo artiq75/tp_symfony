@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Booking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +20,12 @@ class BookingRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Booking::class);
+    }
+
+    public function findAllQuery(): QueryBuilder
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.created_at', 'desc');
     }
 
     public function save(Booking $entity, bool $flush = false): void

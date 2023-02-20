@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\BookingRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,24 +17,34 @@ class Booking
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
+    #[Assert\Type('datetime')]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
+    #[Assert\Type('datetime')]
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Assert\PositiveOrZero]
+    #[Assert\Type('integer')]
     private ?int $children = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Assert\PositiveOrZero]
+    #[Assert\Type('integer')]
     private ?int $adults = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Type('boolean')]
     private ?bool $pool_acess = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Type('boolean')]
     private ?bool $grant_access = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

@@ -9,7 +9,6 @@ use App\Entity\Period;
 use App\Entity\Property;
 use App\Entity\Tax;
 use App\Event\BookingBookEvent;
-use App\Event\InvoiceCreateEvent;
 use App\Form\BookingType;
 use App\Repository\TaxRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -32,11 +31,7 @@ class BookingController extends AbstractController
   public function book(Property $property, Request $request, ManagerRegistry $doctrine): Response
   {
     $booking = new Booking();
-    $form = $this->createForm(BookingType::class, $booking, [
-      'action' => $this->generateUrl('booking.book', [
-        'id' => $property->getId()
-      ])
-    ]);
+    $form = $this->createForm(BookingType::class, $booking);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -109,14 +104,10 @@ class BookingController extends AbstractController
       $manager->flush();
 
       $this->addFlash('success', 'Réservation prise en compte!');
-
-      return $this->redirectToRoute('property.show', [
-        'id' => $property->getId()
-      ]);
     }
-
-    return $this->render('booking/_form.html.twig', [
-      'form' => $form
+    
+    return $this->redirectToRoute('property.show', [
+      'id' => $property->getId()
     ]);
   }
 }

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -28,8 +29,7 @@ class PropertyRepository extends ServiceEntityRepository
      */
     public function findAll(): array
     {
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.created_at', 'desc')
+        return $this->findAllQuery()
             ->getQuery()
             ->getResult();
     }
@@ -39,12 +39,23 @@ class PropertyRepository extends ServiceEntityRepository
      */
     public function findAllByOwner(UserInterface $user): array
     {
+        return $this->findAllByOwnerQuery($user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllQuery(): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.created_at', 'desc');
+    }
+
+    public function findAllByOwnerQuery(UserInterface $user): QueryBuilder
+    {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.owner', 'o', Join::WITH, 'o.id = :id')
             ->orderBy('p.created_at', 'desc')
-            ->setParameter('id', $user->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('id', $user->getId());
     }
 
     public function save(Property $entity, bool $flush = false): void

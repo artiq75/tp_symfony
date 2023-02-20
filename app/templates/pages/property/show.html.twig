@@ -11,10 +11,14 @@
 
     <h1>{{ property.type.label }}</h1>
     <div class="body">
-        <img src="{{ vich_uploader_asset(property) }}" alt="">
+        {% if property.imageFile %}
+            <img src="{{ vich_uploader_asset(property) }}" alt="">
+        {% else %}
+            <img src="{{ property.imageName }}" alt="">
+        {% endif %}
         <section>
             <h2>Réserver</h2>
-            {{ render(path('booking.book', {id: property.id})) }}
+            {% include 'pages/booking/_form.html.twig' %}
         </section>
     </div>
 </main>

@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Property;
 use App\Form\PropertyType;
 use App\Repository\PropertyRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,22 +23,28 @@ class AdminPropertyController extends AbstractController
   }
 
   #[Route('/biens', name: 'admin.property.index', methods: ['GET'])]
-  public function index(): Response
+  public function index(PaginatorInterface $paginator, Request $request): Response
   {
-    $properties = $this->propertyRepository->findAll();
+    $query = $this->propertyRepository->findAllQuery();
 
     if (!$this->isGranted('ROLE_ADMIN')) {
-      $properties = $this->propertyRepository->findAllByOwner($this->getUser());
+      $query = $this->propertyRepository->findAllByOwnerQuery($this->getUser());
     }
 
+    $pagination = $paginator->paginate(
+      $query,
+      $request->query->get('page', 1),
+      4
+    );
+
     return $this->render('pages/admin/property/index.html.twig', [
-      'properties' => $properties
+      'pagination' => $pagination
     ]);
   }
 
   #[Route('/biens/creation', name: 'admin.property.new', methods: ['GET', 'POST'])]
   public function new(Request $request): Response
-  {
+  {       
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
     $property = new Property();

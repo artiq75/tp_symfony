@@ -32,7 +32,7 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 5; $i++) { 
+        for ($i=0; $i < 20; $i++) { 
             $invoice = new Invoice();
 
             /**
@@ -46,7 +46,8 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
               ->setCustomerName($booking->getCustomerFullName())
               ->setCustomerAddress($booking->getCustomerAddress())
               ->setTva(20)
-              ->setIsActive($this->faker->boolean(20))
+              ->setIsActive($this->faker->boolean())
+              ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'))
               ->setUuid(uniqid());
 
               $manager->persist($invoice);

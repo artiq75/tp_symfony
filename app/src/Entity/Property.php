@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
@@ -20,9 +21,11 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $availability_start = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $availability_end = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -30,9 +33,11 @@ class Property
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Type(PropertyType::class)]
     private ?PropertyType $type = null;
 
-    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Booking::class)]
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Booking::class, cascade: ['remove'])]
     private Collection $bookings;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -44,7 +49,7 @@ class Property
     #[ORM\Column(nullable: true, type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'properties', cascade: ['remove'])]
+    #[ORM\ManyToOne(inversedBy: 'properties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 

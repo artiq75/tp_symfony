@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Booking;
 use App\Repository\BookingRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,16 @@ class AdminBookingController extends AbstractController
   }
 
   #[Route('/reservations', name: 'admin.booking.index', methods: ['GET'])]
-  public function index(): Response
+  public function index(PaginatorInterface $paginator, Request $request): Response
   {
+    $pagination = $paginator->paginate(
+      $this->repository->findAllQuery(),
+      $request->query->get('page', 1),
+      4
+    );
+
     return $this->render('pages/admin/booking/index.html.twig', [
-      'bookings' => $this->repository->findAll()
+      'pagination' => $pagination
     ]);
   }
 

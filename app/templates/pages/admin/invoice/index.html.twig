@@ -8,7 +8,7 @@
   <div class="alert alert-success">{{ message }}</div>
 {% endfor %}
 
-{% if invoices is empty %}
+{% if pagination is empty %}
   <h2>Il n'y a aucune factures pour le moment</h2>
 {% else %}
   <table>
@@ -18,12 +18,11 @@
         <th>Adresse Entreprise</th>
         <th>Locataire</th>
         <th>Adresse Locataire</th>
-        <th>Total</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for invoice in invoices %}
+      {% for invoice in pagination %}
         <tr>
           <td>{{ invoice.companyName }}</td>
           <td>{{ invoice.companyAddress }}</td>
@@ -45,6 +44,11 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <div class="mb1"></div>
+
+  {{ knp_pagination_render(pagination) }}
+
 {% endif %}
 
 {% endblock %}

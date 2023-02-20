@@ -1,15 +1,17 @@
 <h1>Facture</h1>
 
-<p><strong>{{ invoice.customerName }}</strong></p>
+<p><strong>{{ invoice.companyName }}</strong></p>
+<p>{{ invoice.companyAddress }}</p>
 
 <table>
     <thead>
         <tr>
-            <th>Désignation</th>
+            <th>Tva</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td>{{ invoice.tva }}%</td>
         </tr>
     </tbody>
 </table>

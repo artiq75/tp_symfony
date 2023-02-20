@@ -38,7 +38,7 @@ class PropertyType extends AbstractType
                 'choice_label' => 'label'
             ])
             ->add('image_file', VichImageType::class, [
-                'required' => false,
+                'required' => true,
                 'allow_delete' => false,
                 'download_uri' => false,
             ]);
@@ -50,6 +50,9 @@ class PropertyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Property::class,
+            'attr' => [
+                'novalidate' => 'novalidate'
+            ]
         ]);
     }
 }

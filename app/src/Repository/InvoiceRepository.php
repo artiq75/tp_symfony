@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Invoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,14 +22,19 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
+    public function findAllQuery(): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.isActive = 1')
+            ->orderBy('i.createdAt', 'desc');
+    }
+
     /**
      * @return Invoice[]
      */
     public function findAll(): array
     {
-        return $this->createQueryBuilder('i')
-            ->where('i.isActive = 1')
-            ->orderBy('i.createdAt', 'desc')
+        return $this->findAllQuery()
             ->getQuery()
             ->getResult();
     }

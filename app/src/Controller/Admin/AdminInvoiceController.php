@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Invoice;
 use App\Repository\InvoiceRepository;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Component\Pager\PaginatorInterface;
 use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,16 @@ class AdminInvoiceController extends AbstractController
   }
 
   #[Route('/facturations', name: 'admin.invoice.index', methods: ['GET'])]
-  public function index(): Response
+  public function index(PaginatorInterface $paginator, Request $request): Response
   {
+    $pagination = $paginator->paginate(
+      $this->repository->findAllQuery(),
+      $request->query->get('page', 1),
+      8
+    );
+
     return $this->render('pages/admin/invoice/index.html.twig', [
-      'invoices' => $this->repository->findAll()
+      'pagination' => $pagination
     ]);
   }
 

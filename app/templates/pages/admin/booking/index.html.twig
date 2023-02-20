@@ -8,7 +8,7 @@
   <div class="alert alert-success">{{ message }}</div>
 {% endfor %}
 
-{% if bookings is empty %}
+{% if pagination is empty %}
   <h2>Il n'y a aucune réservation pour le moment</h2>
 {% else %}
   <table>
@@ -24,7 +24,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for booking in bookings %}
+      {% for booking in pagination %}
         <tr>
           <td>
             {% if booking.property.imageFile %}
@@ -51,6 +51,11 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <div class="mb1"></div>
+
+  {{ knp_pagination_render(pagination) }}
+  
 {% endif %}
 
 {% endblock %}

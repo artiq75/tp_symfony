@@ -12,7 +12,7 @@
   <a href="{{ path('admin.property.new') }}" class="btn btn-primary mb1">Ajouter un nouveau bien</a>
 {% endif %}
 
-{% if properties is empty %}
+{% if pagination is empty %}
   <h2>Vous n'avez ajouter aucun bien</h2>
 {% else %}
   <table>
@@ -27,14 +27,10 @@
       </tr>
     </thead>
     <tbody>
-      {% for property in properties %}
+      {% for property in pagination %}
         <tr>
           <td>
-            {% if property.imageFile %}
-              <img src="{{ vich_uploader_asset(property) }}" alt="">
-            {% else %}
-              <img src="{{ property.imageName }}" alt="">
-            {% endif %}
+            <img src="{{ vich_uploader_asset(property) }}" alt="">
           </td>
           <td>{{ property.type.label }}</td>
           <td>{{ property.type.formatedPrice }} €</td>
@@ -60,6 +56,11 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <div class="mb1"></div>
+
+  {{ knp_pagination_render(pagination) }}
+  
 {% endif %}
 
 {% endblock %}

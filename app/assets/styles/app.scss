@@ -4,6 +4,7 @@
     --danger-color: #ff1100;
     --info-color: #00d9ff;
     --white: white;
+    --black: #03001C;
     --radius: 7px;
     --radius-sm: 4px;
     --gap: 20px;
@@ -30,15 +31,24 @@ body {
     font-family: var(--font-family-sans);
     font-size: 16px;
     line-height: 1.6;
+    color: var(--black);
 }
 
 img {
     width: 100%;
 }
 
+ul {
+    list-style-type: none;
+}
+
 label {
     display: block;
     margin-bottom: .25em;
+}
+
+label + ul {
+    color: var(--danger-color);
 }
 
 input:not([type="checkbox"]),
@@ -67,7 +77,8 @@ table {
     border-collapse: collapse;
 }
 
-td, th {
+td,
+th {
     padding: 1em;
     border: 1px solid black;
 }
@@ -96,11 +107,16 @@ h1 {
 }
 
 .mb1 {
-    display: inline-block;
+    display: block;
     margin-bottom: 1em;
 }
 
+.g2 {
+    grid-column: 1 / span 2;
+}
+
 .btn {
+    max-width: max-content;
     padding: var(--space) calc(var(--space) * 1.5);
     font: inherit;
     border-color: transparent;
@@ -238,7 +254,7 @@ h1 {
     top: 0;
 }
 
-.admin-nav ul > *:not(:last-child) {
+.admin-nav ul>*:not(:last-child) {
     margin-bottom: var(--space);
 }
 
@@ -268,15 +284,46 @@ h1 {
     padding: 0 1em;
 }
 
+.pagination {
+    max-width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space);
+}
+
+.pagination a {
+    padding: .5em;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pagination>*:not(.current) {
+    border-radius: calc(var(--radius) / 3);
+    box-shadow: var(--shadow);
+    transition: .3s;
+}
+
+.pagination>*:not(.current):hover {
+    background: var(--primary-color);
+}
+
+main {
+    padding-bottom: 1em;
+}
+
+.display1 {
+    font-size: 3em;
+}
+
+.home-text {
+    padding-top: 5em;
+}
+
 @media (min-width: 700px) {
     .property-items {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1000px) {
-    .property-items {
-        grid-template-columns: repeat(3, 1fr);
     }
 
     .property-page img {
@@ -288,6 +335,12 @@ h1 {
         grid-template-columns: repeat(2, 1fr);
         align-items: center;
         gap: var(--gap);
+    }
+}
+
+@media (min-width: 1000px) {
+    .property-items {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
