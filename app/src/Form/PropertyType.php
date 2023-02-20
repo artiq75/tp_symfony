@@ -50,6 +50,7 @@ class PropertyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Property::class,
+            'translation_domain' => 'property_form',
             'attr' => [
                 'novalidate' => 'novalidate'
             ]

@@ -3,12 +3,6 @@
 {% block body %}
   
 <main class="container property-page">
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-
     <h1>{{ property.type.label }}</h1>
     <div class="body">
         {% if property.imageFile %}
@@ -17,6 +11,12 @@
             <img src="{{ property.imageName }}" alt="">
         {% endif %}
         <section>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             <h2>Réserver</h2>
             {% include 'pages/booking/_form.html.twig' %}
         </section>

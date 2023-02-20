@@ -36,13 +36,13 @@ class HomeController extends AbstractController
   public function show(Property $property, Request $request): Response
   {
     $booking = new Booking();
+    $booking->setProperty($property);
     $form = $this->createForm(BookingType::class, $booking);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
       $manager = $this->doctrine->getManager();
 
-      $booking->setProperty($property);
       $manager->persist($booking);
 
       $this->dispatcher->dispatch(new BookingBookEvent($booking), BookingBookEvent::NAME);

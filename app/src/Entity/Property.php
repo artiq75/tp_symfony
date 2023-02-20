@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
@@ -190,5 +191,15 @@ class Property
         $this->owner = $owner;
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validateDate(ExecutionContextInterface $context, $payload)
+    {
+        if ($this->availability_start >= $this->availability_end) {
+            $context->buildViolation("La date de début de disponibilité doit être inférieur à la date de fin de disponibilité!")
+                ->atPath('availability_start')
+                ->addViolation();
+        }
     }
 }

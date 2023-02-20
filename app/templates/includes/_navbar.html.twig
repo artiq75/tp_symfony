@@ -1,4 +1,4 @@
-<header class="navbar">
+<header class="navbar mb1">
 
   <nav class="container navbar-nav">
 
@@ -26,6 +26,7 @@
         {% endif %}
         
         <a class="btn btn-danger" href="{{ path('logout') }}">
+          {{ app.user.fullName }}
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </a>
 

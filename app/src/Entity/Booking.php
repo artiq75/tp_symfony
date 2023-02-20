@@ -6,6 +6,7 @@ use App\Repository\BookingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 class Booking
@@ -17,24 +18,20 @@ class Booking
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\Type('datetime')]
     private ?\DateTimeInterface $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\Type('datetime')]
     private ?\DateTimeInterface $end_date = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
     #[Assert\PositiveOrZero]
-    #[Assert\Type('integer')]
     private ?int $children = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
     #[Assert\PositiveOrZero]
-    #[Assert\Type('integer')]
     private ?int $adults = null;
 
     #[ORM\Column]
@@ -210,5 +207,26 @@ class Booking
         $this->property = $property;
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validateDate(ExecutionContextInterface $context, $payload)
+    {
+        $property = $this->getProperty();
+
+        if ($this->start_date >= $this->end_date) {
+            $context->buildViolation("La date d'arriver doit être inférieur à la date de départ!")
+                ->atPath('start_date')
+                ->addViolation();
+        }
+
+        if (
+            $this->start_date < $property->getAvailabilityStart() ||
+            $this->end_date > $property->getAvailabilityEnd()
+        ) {
+            $context->buildViolation("Les dates de réservation doivent corréspondre aux dates de disponibilté!")
+                ->atPath('start_date')
+                ->addViolation();
+        }
     }
 }
