@@ -47,7 +47,7 @@ label {
     margin-bottom: .25em;
 }
 
-label + ul {
+label+ul {
     color: var(--danger-color);
 }
 
@@ -125,6 +125,11 @@ h1 {
     cursor: pointer;
     text-decoration: none;
     color: inherit;
+}
+
+.btn:disabled {
+    filter:brightness(.8);
+    cursor: default;
 }
 
 .btn.btn-primary {

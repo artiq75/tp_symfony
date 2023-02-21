@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Booking;
+use App\Entity\Period;
 use App\Entity\Property;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -38,6 +39,7 @@ class BookingType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-primary w-100',
+                    'disabled' => !Period::isCampingOpen()
                 ],
             ])
         ;

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\Period;
 use App\Entity\Property;
 use App\Event\BookingBookEvent;
 use App\Form\BookingType;
@@ -40,7 +41,9 @@ class HomeController extends AbstractController
     $form = $this->createForm(BookingType::class, $booking);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    $isCampingOpen = Period::isCampingOpen();
+
+    if ($form->isSubmitted() && $form->isValid() && $isCampingOpen) {
       $manager = $this->doctrine->getManager();
 
       $manager->persist($booking);
@@ -113,7 +116,8 @@ class HomeController extends AbstractController
 
     return $this->render('pages/property/show.html.twig', [
       'property' => $property,
-      'form' => $form
+      'form' => $form,
+      'is_open' => $isCampingOpen
     ]);
   }
 }

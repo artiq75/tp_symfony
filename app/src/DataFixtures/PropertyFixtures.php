@@ -33,17 +33,20 @@ class PropertyFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $types = $this->typeRepository->findAll();
+        $owners = $this->userRepository->findAll();
+        $availabilityStart = new \DateTimeImmutable();
+
         for ($i = 0; $i < 100; $i++) {
-            $datetime = new \DateTime();
-            $dateTimeModify = $datetime->modify('+' . $this->faker->numberBetween(7, 20) . ' day');
+            $availabilityEnd = $availabilityStart->modify('+' . $this->faker->numberBetween(7, 20) . ' days');
 
             $property = new Property();
             $property
-                ->setAvailabilityStart($datetime)
-                ->setAvailabilityEnd($dateTimeModify)
+                ->setAvailabilityStart($availabilityStart)
+                ->setAvailabilityEnd($availabilityEnd)
                 ->setImageName("https://picsum.photos/300/315")
-                ->setType($this->faker->randomElement($this->typeRepository->findAll()))
-                ->setOwner($this->faker->randomElement($this->userRepository->findAll()));
+                ->setType($this->faker->randomElement($types))
+                ->setOwner($this->faker->randomElement($owners));
 
             $manager->persist($property);
         }

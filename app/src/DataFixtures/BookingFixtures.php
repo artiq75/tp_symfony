@@ -33,25 +33,32 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 50; $i++) {
+        $properties = $this->propertyRepository->findAll();
+
+        for ($i = 0; $i < 50; $i++) {
             /**
              * @var \App\Entity\Property
              */
-            $property = $this->faker->randomElement($this->propertyRepository->findAll());
+            $property = $this->faker->randomElement($properties);
             $availabilityStart = $property->getAvailabilityStart();
-            $availabilityEnd = $property->getAvailabilityEnd();
+            $max = $availabilityStart->diff($property->getAvailabilityEnd())->d;
+            $min = $max / 2;
+            $days = $this->faker->numberBetween($min, $max);
+            $availabilityEnd = clone $availabilityStart;
+            $availabilityEnd = $availabilityEnd->modify('+' . $days . ' days');
+
             $booking = new Booking();
             $booking
-            ->setCustomerFirstname($this->faker->firstName())
-            ->setCustomerLastname($this->faker->lastName())
-            ->setCustomerAddress($this->faker->address())
-            ->setAdults($this->faker->numberBetween(2, 8))
-            ->setChildren($this->faker->numberBetween(2, 5))
-            ->setStartDate($this->faker->dateTimeBetween($availabilityStart, $availabilityEnd))
-            ->setEndDate($this->faker->dateTimeBetween($availabilityStart, $availabilityEnd))
-            ->setGrantAccess($this->faker->boolean())
-            ->setPoolAcess($this->faker->boolean())
-            ->setProperty($property);
+                ->setCustomerFirstname($this->faker->firstName())
+                ->setCustomerLastname($this->faker->lastName())
+                ->setCustomerAddress($this->faker->address())
+                ->setAdults($this->faker->numberBetween(2, 8))
+                ->setChildren($this->faker->numberBetween(2, 5))
+                ->setStartDate($availabilityStart)
+                ->setEndDate($availabilityEnd)
+                ->setGrantAccess($this->faker->boolean())
+                ->setPoolAcess($this->faker->boolean())
+                ->setProperty($property);
 
             $manager->persist($booking);
         }

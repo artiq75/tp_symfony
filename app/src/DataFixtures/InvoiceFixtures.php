@@ -32,25 +32,27 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 20; $i++) { 
+        $bookings = $this->bookingRepository->findAll();
+        
+        for ($i = 0; $i < 20; $i++) {
             $invoice = new Invoice();
 
             /**
              * @var Booking
              */
-            $booking = $this->faker->randomElement($this->bookingRepository->findAll());
+            $booking = $this->faker->randomElement($bookings);
 
             $invoice
-              ->setCompanyName("Espadrille Volante")
-              ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
-              ->setCustomerName($booking->getCustomerFullName())
-              ->setCustomerAddress($booking->getCustomerAddress())
-              ->setTva(20)
-              ->setIsActive($this->faker->boolean())
-              ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'))
-              ->setUuid(uniqid());
+                ->setCompanyName("Espadrille Volante")
+                ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
+                ->setCustomerName($booking->getCustomerFullName())
+                ->setCustomerAddress($booking->getCustomerAddress())
+                ->setTva(20)
+                ->setIsActive($this->faker->boolean())
+                ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'))
+                ->setUuid(uniqid());
 
-              $manager->persist($invoice);
+            $manager->persist($invoice);
         }
 
         $manager->flush();

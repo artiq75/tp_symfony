@@ -4,7 +4,7 @@ namespace App\Entity;
 
 class Period
 {
-  public const  CAMPING_OPEN_DATE = [
+  public const CAMPING_OPEN_DATE = [
     'start' => [
       'days' => 05,
       'month' => 05
@@ -15,7 +15,7 @@ class Period
     ]
   ];
 
-  public const  CAMPING_HIGHT_SEASON_DATE = [
+  public const CAMPING_HIGHT_SEASON_DATE = [
     'start' => [
       'days' => 21,
       'month' => 06
@@ -25,4 +25,15 @@ class Period
       'month' => 8
     ]
   ];
+
+  public static function isCampingOpen(): bool
+  {
+    $now = new \DateTime();
+
+    return
+      !$now->format('d') >= self::CAMPING_OPEN_DATE['start']['days'] &&
+      $now->format('m') >= self::CAMPING_OPEN_DATE['start']['month'] &&
+      $now->format('d') <= self::CAMPING_OPEN_DATE['start']['days'] &&
+      $now->format('m') <= self::CAMPING_OPEN_DATE['start']['month'];
+  }
 }
