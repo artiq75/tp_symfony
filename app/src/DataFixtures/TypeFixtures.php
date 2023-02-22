@@ -11,40 +11,59 @@ class TypeFixtures extends Fixture
     private const TYPES = [
         [
             'label' => 'M-H 3 personnes',
-            'price' => 20 * 100
+            'adultRate' => 20 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'M-H 4 personnes',
-            'price' => 24 * 100
+            'adultRate' => 24 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'M-H 5 personnes',
-            'price' => 27 * 100
+            'adultRate' => 27 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'M-H 6-8 personnes',
-            'price' => 34 * 100
+            'adultRate' => 34 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'Caravane 2 places',
-            'price' => 15 * 100
+            'adultRate' => 15 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'Caravane 4 places',
-            'price' => 18 * 100
+            'adultRate' => 18 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'Caravane 6 places',
-            'price' => 24 * 100
+            'adultRate' => 24 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'Emplacement 8m²',
-            'price' => 12 * 100
+            'adultRate' => 12 * 100,
+            'childRate' => 0,
         ],
         [
             'label' => 'Emplacement 12m²',
-            'price' => 14 * 100
+            'adultRate' => 14 * 100,
+            'childRate' => 0,
         ],
+        [
+            'label' => 'Taxe de séjour',
+            'childRate' => 1 * 35,
+            'adultRate' => 1 * 60
+        ],
+        [
+            'label' => 'Taxe piscine',
+            'childRate' => 1 * 100,
+            'adultRate' => 1 * 150
+        ]
     ];
 
     public function load(ObjectManager $manager): void
@@ -53,7 +72,8 @@ class TypeFixtures extends Fixture
             $propertyType = new PropertyType();
             $propertyType
                 ->setLabel($type['label'])
-                ->setPrice($type['price']);
+                ->setAdultRate($type['adultRate'])
+                ->setChildRate($type['childRate']);
 
             $manager->persist($propertyType);
         }

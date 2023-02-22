@@ -27,12 +27,6 @@ class Invoice
     #[ORM\Column(length: 255)]
     private ?string $customerAddress = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $uuid = null;
-
-    #[ORM\Column]
-    private ?int $tva = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -99,30 +93,6 @@ class Invoice
     public function setCustomerAddress(string $customerAddress): self
     {
         $this->customerAddress = $customerAddress;
-
-        return $this;
-    }
-
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function getTva(): ?int
-    {
-        return $this->tva;
-    }
-
-    public function setTva(int $tva): self
-    {
-        $this->tva = $tva;
 
         return $this;
     }

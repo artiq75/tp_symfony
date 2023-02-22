@@ -50,11 +50,9 @@ class HomeController extends AbstractController
 
       $this->dispatcher->dispatch(new BookingBookEvent($booking), BookingBookEvent::NAME);
 
-      // $stayTax = $this->taxRepository->findOneBy(['slug' => Tax::TAX_STAY_SLUG]);
+      $price = $booking->getProperty();
 
-      // $price = $booking->getProperty()->getType()->getPrice();
-
-      // $now = new \DateTime();
+      $now = new \DateTime();
 
       // if (
       //   $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&

@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PropertyTypeRepository::class)]
 class PropertyType
 {
+    public const STAY_TYPE = 10;
+    
+    public const POOL_TYPE = 11;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,11 +22,14 @@ class PropertyType
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-    #[ORM\Column]
-    private ?int $price = null;
-
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Property::class)]
     private Collection $properties;
+
+    #[ORM\Column]
+    private ?int $childRate = null;
+
+    #[ORM\Column]
+    private ?int $adultRate = null;
 
     public function __construct()
     {
@@ -45,24 +52,7 @@ class PropertyType
 
         return $this;
     }
-
-    public function getPrice(): ?int
-    {
-        return $this->price;
-    }
-
-    public function setPrice(int $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getFormatedPrice(): string
-    {
-        return number_format($this->price / 100, 0, '', ' ');
-    }
-
+    
     /**
      * @return Collection<int, Property>
      */
@@ -89,6 +79,30 @@ class PropertyType
                 $property->setType(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getChildRate(): ?int
+    {
+        return $this->childRate;
+    }
+
+    public function setChildRate(int $childRate): self
+    {
+        $this->childRate = $childRate;
+
+        return $this;
+    }
+
+    public function getAdultRate(): ?int
+    {
+        return $this->adultRate;
+    }
+
+    public function setAdultRate(int $adultRate): self
+    {
+        $this->adultRate = $adultRate;
 
         return $this;
     }

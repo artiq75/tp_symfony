@@ -13,63 +13,25 @@ class InvoiceLine
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $designation = null;
-
-    #[ORM\Column]
-    private ?int $children = null;
-
-    #[ORM\Column]
-    private ?int $adults = null;
-
     #[ORM\Column]
     private ?int $unitPrice = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?int $fillOrder = null;
+
+    #[ORM\Column]
+    private ?int $days = null;
+
+    #[ORM\Column]
+    private ?int $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'invoiceLines')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDesignation(): ?string
-    {
-        return $this->designation;
-    }
-
-    public function setDesignation(string $designation): self
-    {
-        $this->designation = $designation;
-
-        return $this;
-    }
-
-    public function getChildren(): ?int
-    {
-        return $this->children;
-    }
-
-    public function setChildren(int $children): self
-    {
-        $this->children = $children;
-
-        return $this;
-    }
-
-    public function getAdults(): ?int
-    {
-        return $this->adults;
-    }
-
-    public function setAdults(int $adults): self
-    {
-        $this->adults = $adults;
-
-        return $this;
     }
 
     public function getUnitPrice(): ?int
@@ -84,14 +46,38 @@ class InvoiceLine
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getFillOrder(): ?int
     {
-        return $this->createdAt;
+        return $this->fillOrder;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setFillOrder(int $fillOrder): self
     {
-        $this->createdAt = $createdAt;
+        $this->fillOrder = $fillOrder;
+
+        return $this;
+    }
+
+    public function getDays(): ?int
+    {
+        return $this->days;
+    }
+
+    public function setDays(int $days): self
+    {
+        $this->days = $days;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

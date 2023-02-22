@@ -47,10 +47,8 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
                 ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
                 ->setCustomerName($booking->getCustomerFullName())
                 ->setCustomerAddress($booking->getCustomerAddress())
-                ->setTva(20)
                 ->setIsActive($this->faker->boolean())
-                ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'))
-                ->setUuid(uniqid());
+                ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'));
 
             $manager->persist($invoice);
         }
