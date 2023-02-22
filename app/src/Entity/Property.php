@@ -54,6 +54,12 @@ class Property
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[ORM\Column]
+    private ?int $adultRate = null;
+
+    #[ORM\Column]
+    private ?int $childRate = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -201,5 +207,29 @@ class Property
                 ->atPath('availability_start')
                 ->addViolation();
         }
+    }
+
+    public function getAdultRate(): ?int
+    {
+        return $this->adultRate;
+    }
+
+    public function setAdultRate(int $adultRate): self
+    {
+        $this->adultRate = $adultRate;
+
+        return $this;
+    }
+
+    public function getChildRate(): ?int
+    {
+        return $this->childRate;
+    }
+
+    public function setChildRate(int $childRate): self
+    {
+        $this->childRate = $childRate;
+
+        return $this;
     }
 }

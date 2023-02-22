@@ -71,9 +71,7 @@ class TypeFixtures extends Fixture
         foreach (self::TYPES as $type) {
             $propertyType = new PropertyType();
             $propertyType
-                ->setLabel($type['label'])
-                ->setAdultRate($type['adultRate'])
-                ->setChildRate($type['childRate']);
+                ->setLabel($type['label']);
 
             $manager->persist($propertyType);
         }

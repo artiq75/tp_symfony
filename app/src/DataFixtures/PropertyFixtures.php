@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Property;
+use App\Entity\PropertyType;
 use App\Repository\PropertyTypeRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -41,12 +42,22 @@ class PropertyFixtures extends Fixture implements DependentFixtureInterface
             $availabilityEnd = $availabilityStart->modify('+' . $this->faker->numberBetween(7, 20) . ' days');
 
             $property = new Property();
+
             $property
                 ->setAvailabilityStart($availabilityStart)
                 ->setAvailabilityEnd($availabilityEnd)
                 ->setImageName("https://picsum.photos/300/315")
-                ->setType($this->faker->randomElement($types))
                 ->setOwner($this->faker->randomElement($owners));
+
+            $type = $this->faker->randomElement($types);
+
+            if ($type->getId() === PropertyType::POOL_TYPE) {
+                $property
+                    ->setAdultRate()
+                    ->setChildRate();
+            } else if ($type->getId() === PropertyType::STAY_TYPE) {
+
+            }
 
             $manager->persist($property);
         }

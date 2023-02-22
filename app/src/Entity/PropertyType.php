@@ -25,12 +25,6 @@ class PropertyType
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Property::class)]
     private Collection $properties;
 
-    #[ORM\Column]
-    private ?int $childRate = null;
-
-    #[ORM\Column]
-    private ?int $adultRate = null;
-
     public function __construct()
     {
         $this->properties = new ArrayCollection();
@@ -79,30 +73,6 @@ class PropertyType
                 $property->setType(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getChildRate(): ?int
-    {
-        return $this->childRate;
-    }
-
-    public function setChildRate(int $childRate): self
-    {
-        $this->childRate = $childRate;
-
-        return $this;
-    }
-
-    public function getAdultRate(): ?int
-    {
-        return $this->adultRate;
-    }
-
-    public function setAdultRate(int $adultRate): self
-    {
-        $this->adultRate = $adultRate;
 
         return $this;
     }
