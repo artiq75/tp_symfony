@@ -1,3 +1,9 @@
 {% extends 'admin.base.html.twig' %}
 
 {% block title 'Dashboard' %}
+
+{% block body %}
+  
+  <h2>Bienvenue {{ app.user.fullName }}</h2>
+
+{% endblock %}

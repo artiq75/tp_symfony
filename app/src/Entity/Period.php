@@ -31,7 +31,7 @@ class Period
     $now = new \DateTime();
 
     return
-      !$now->format('d') >= self::CAMPING_OPEN_DATE['start']['days'] &&
+      $now->format('d') >= self::CAMPING_OPEN_DATE['start']['days'] &&
       $now->format('m') >= self::CAMPING_OPEN_DATE['start']['month'] &&
       $now->format('d') <= self::CAMPING_OPEN_DATE['start']['days'] &&
       $now->format('m') <= self::CAMPING_OPEN_DATE['start']['month'];

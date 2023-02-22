@@ -38,7 +38,7 @@ class AdminBookingController extends AbstractController
   {
     if ($this->isCsrfTokenValid('delete' . $booking->getId(), $request->request->get('_token'))) {
       $this->repository->remove($booking, true);
-      $this->addFlash('success', 'Suppression de la réservation avec succès');
+      $this->addFlash('success', 'Annulation de la réservation avec succès');
     }
 
     return $this->redirectToRoute('admin.booking.index');

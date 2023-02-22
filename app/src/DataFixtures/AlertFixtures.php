@@ -27,7 +27,7 @@ class AlertFixtures extends Fixture
             ->setIsSeen($this->faker->boolean())
             ->setPublishedAt(new \DateTime());
 
-            // $manager->persist($alert);
+            $manager->persist($alert);
         }
 
         $manager->flush();
