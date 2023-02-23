@@ -36,4 +36,15 @@ class Period
       $now->format('d') <= self::CAMPING_OPEN_DATE['start']['days'] &&
       $now->format('m') <= self::CAMPING_OPEN_DATE['start']['month'];
   }
+
+  public static function isHightSeason(): bool
+  {
+    $now = new \DateTime();
+
+    return
+      $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
+      $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
+      $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
+      $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month'];
+  }
 }

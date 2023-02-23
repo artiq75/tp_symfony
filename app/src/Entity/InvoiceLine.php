@@ -29,6 +29,9 @@ class InvoiceLine
     #[ORM\JoinColumn(nullable: false)]
     private ?Invoice $invoice = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $designation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,11 @@ class InvoiceLine
         $this->unitPrice = $unitPrice;
 
         return $this;
+    }
+
+    public function getFormatedPrice(): string
+    {
+        return number_format($this->unitPrice / 100, 0, '', ' ');
     }
 
     public function getFillOrder(): ?int
@@ -90,6 +98,18 @@ class InvoiceLine
     public function setInvoice(?Invoice $invoice): self
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    public function getDesignation(): ?string
+    {
+        return $this->designation;
+    }
+
+    public function setDesignation(string $designation): self
+    {
+        $this->designation = $designation;
 
         return $this;
     }

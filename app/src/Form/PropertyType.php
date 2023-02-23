@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Property;
 use App\Entity\PropertyType as Type;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -35,6 +36,11 @@ class PropertyType extends AbstractType
             $builder
             ->add('type', EntityType::class, [
                 'class' => Type::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                    ->where('p.id NOT IN(:ids)')
+                    ->setParameter('ids', [Type::POOL_TYPE, Type::STAY_TYPE]);
+                },
                 'choice_label' => 'label'
             ])
             ->add('image_file', VichImageType::class, [

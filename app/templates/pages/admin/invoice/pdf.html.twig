@@ -1,22 +1,77 @@
-<h1>Facture</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    h1 {
+      font-size: 3em;
+    }
+  
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
 
-<h2>Facturé à</h2>
-<p><strong>{{ invoice.companyName }}</strong></p>
-<p>{{ invoice.companyAddress }}</p>
+    th {
+        padding: 1em;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
 
-<h2>Envoyé à</h2>
-<p><strong>{{ invoice.customerName }}</strong></p>
-<p>{{ invoice.customerAddress }}</p>
+    td {
+      padding: 1em;
+    }
 
-<table>
+    .info {
+      display: flex;
+      justify-content: space-between;
+      gap: 3em;
+      margin-bottom: 3em;
+    }
+
+    .info-item {
+      max-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Facture</h1>
+
+  <div class="info">
+    <div class="info-item">
+      <h2>Facturé à</h2>
+      <p><strong>{{ invoice.companyName }}</strong></p>
+      <p>{{ invoice.companyAddress }}</p>
+    </div>
+
+    <div class="info-item">
+      <h2>Envoyé à</h2>
+      <p><strong>{{ invoice.customerName }}</strong></p>
+      <p>{{ invoice.customerAddress }}</p>
+    </div>
+  </div>
+
+  <table>
     <thead>
-        <tr>
-            <th>Tva</th>
-        </tr>
+      <tr>
+        <th>Qantité</th>
+        <th>Désignation</th>
+        <th>Prix unitaire</th>
+      </tr>
     </thead>
     <tbody>
+      {% for invoiceLine in invoiceLines %}
         <tr>
-            <td>{{ invoice.tva }}%</td>
+          <td>{{ invoiceLine.days }}</td>
+          <td>{{ invoiceLine.designation }}</td>
+          <td>{{ invoiceLine.formatedPrice }}</td>
         </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+</body>
+</html>

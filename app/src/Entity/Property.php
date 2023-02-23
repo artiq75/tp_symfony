@@ -57,8 +57,10 @@ class Property
     #[ORM\Column]
     private ?int $adultRate = null;
 
-    #[ORM\Column]
-    private ?int $childRate = null;
+    #[ORM\Column(options: [
+        'default' => 0
+    ])]
+    private ?int $childRate = 0;
 
     public function __construct()
     {
@@ -231,5 +233,10 @@ class Property
         $this->childRate = $childRate;
 
         return $this;
+    }
+
+    public function getFormatedPrice(): string
+    {
+        return number_format($this->adultRate / 100, 0, '', ' ');
     }
 }

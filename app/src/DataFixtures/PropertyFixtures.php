@@ -38,28 +38,34 @@ class PropertyFixtures extends Fixture implements DependentFixtureInterface
         $owners = $this->userRepository->findAll();
         $availabilityStart = new \DateTimeImmutable();
 
-        for ($i = 0; $i < 100; $i++) {
-            $availabilityEnd = $availabilityStart->modify('+' . $this->faker->numberBetween(7, 20) . ' days');
+        $alredyExists = [];
 
-            $property = new Property();
+        for ($i = 0; $i < 10; $i++) {
+            foreach (TypeFixtures::TYPES as $type) {
+                $days = $this->faker->numberBetween(7, 20);
+                $availabilityEnd = $availabilityStart->modify('+' . $days . ' days');
 
-            $property
-                ->setAvailabilityStart($availabilityStart)
-                ->setAvailabilityEnd($availabilityEnd)
-                ->setImageName("https://picsum.photos/300/315")
-                ->setOwner($this->faker->randomElement($owners));
+                $property = new Property();
 
-            $type = $this->faker->randomElement($types);
-
-            if ($type->getId() === PropertyType::POOL_TYPE) {
                 $property
-                    ->setAdultRate()
-                    ->setChildRate();
-            } else if ($type->getId() === PropertyType::STAY_TYPE) {
+                    ->setAvailabilityStart($availabilityStart)
+                    ->setAvailabilityEnd($availabilityEnd)
+                    ->setImageName("https://picsum.photos/300/315")
+                    ->setAdultRate($type['adultRate'])
+                    ->setChildRate($type['childRate'])
+                    ->setType($this->getReference($type['label']))
+                    ->setOwner($this->faker->randomElement($owners));
 
+                    $isExist = array_key_exists($type['label'], $alredyExists);
+
+                    if (!$isExist) {
+                        $manager->persist($property);
+                    }
+                    
+                    if ($property->getChildRate() && !$isExist) {
+                        $alredyExists[$type['label']] = $property;
+                    }
             }
-
-            $manager->persist($property);
         }
 
         $manager->flush();

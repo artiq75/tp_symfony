@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Controller\BookingController;
 use App\Entity\Booking;
 use App\Entity\Invoice;
 use App\Repository\BookingRepository;

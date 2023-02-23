@@ -23,7 +23,7 @@
                         <img src="{{ property.imageName }}" alt="">
                     {% endif %}
                     <h2>{{ property.type.label }}</h2>
-                    <h3>{{ property.type.formatedPrice }} €</h3>
+                    <h3>{{ property.formatedPrice }} €</h3>
                     <a href="{{ path('property.show', {id: property.id}) }}" class="btn btn-primary">
                         Voir les disponibilité
                     </a>

@@ -33,7 +33,7 @@
             <img src="{{ vich_uploader_asset(property) }}" alt="">
           </td>
           <td>{{ property.type.label }}</td>
-          <td>{{ property.type.formatedPrice }} €</td>
+          <td>{{ property.formatedPrice }} €</td>
           <td>{{ property.availabilityStart | date('Y-m-d') }}</td>
           <td>{{ property.availabilityEnd | date('Y-m-d') }}</td>
           <td>

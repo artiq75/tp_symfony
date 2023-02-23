@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\Invoice;
+use App\Entity\InvoiceLine;
 use App\Entity\Period;
 use App\Entity\Property;
+use App\Entity\PropertyType;
 use App\Event\BookingBookEvent;
 use App\Form\BookingType;
 use App\Repository\PropertyRepository;
@@ -50,64 +53,70 @@ class HomeController extends AbstractController
 
       $this->dispatcher->dispatch(new BookingBookEvent($booking), BookingBookEvent::NAME);
 
-      $price = $booking->getProperty();
+      $days = $booking->getEndDate()->diff($booking->getStartDate())->d;
 
-      $now = new \DateTime();
+      $invoice = new Invoice();
+      $invoice
+        ->setCompanyName("Espadrille Volante")
+        ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
+        ->setCustomerName($booking->getCustomerFullName())
+        ->setCustomerAddress($booking->getCustomerAddress());
+      $manager->persist($invoice);
 
-      // if (
-      //   $now->format('d') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['days'] &&
-      //   $now->format('m') >= Period::CAMPING_HIGHT_SEASON_DATE['start']['month'] &&
-      //   $now->format('d') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['days'] &&
-      //   $now->format('m') <= Period::CAMPING_HIGHT_SEASON_DATE['end']['month']
-      // ) {
-      //   $price += ($price * 15 / 100);
+      /**
+       * @var Property
+       */
+      $stayProperty = $this->propertyRepository->findOneBy([
+        'type_id' => PropertyType::STAY_TYPE
+      ]);
 
-      //   $difference = $booking->getEndDate()->getTimestamp() - $booking->getStartDate()->getTimestamp();
+      $price = $property->getAdultRate();
 
-      //   // Calcul nombre de tranche de 7 jours
-      //   $number7DayBlock = floor($difference / 7);
+      if (Period::isHightSeason()) {
+        $price += (15 / 100);
+      }
 
-      //   // Réducation 5% par tranche de 7 jours
-      //   for ($i = 0; $i < $number7DayBlock; $i++) {
-      //     $price -= (5 / 100);
-      //   }
-      // }
+      $propertyInvoiceLine = new InvoiceLine();
+      $propertyInvoiceLine
+        ->setUnitPrice($price)
+        ->setType($property->getId())
+        ->setFillOrder(1)
+        ->setDays($days)
+        ->setInvoice($invoice);
+      $manager->persist($invoice);
 
-      // $stayChildTax = $stayTax->getChildRate() * $booking->getChildren();
-      // $stayAdultTax = $stayTax->getAdultRate() * $booking->getAdults();
+      $price = $stayProperty->getAdultRate() + $stayProperty->getChildRate();
 
-      // $price = $booking->getProperty()->getType()->getPrice() + $stayChildTax + $stayAdultTax;
+      $stayInvoiceLine = new InvoiceLine();
+      $stayInvoiceLine
+        ->setUnitPrice($price)
+        ->setType($stayProperty->getId())
+        ->setFillOrder(2)
+        ->setDays($days)
+        ->setInvoice($invoice);
+      $manager->persist($invoice);
 
-      // if ($booking->isPoolAcess()) {
-      //   $poolTax = $this->taxRepository->findOneBy([
-      //     'slug' => Tax::TAX_POOL_SLUG
-      //   ]);
+      if ($booking->isPoolAcess()) {
+        /**
+         * @var Property
+         */
+        $poolProperty = $this->propertyRepository->findOneBy([
+          'type_id' => PropertyType::POOL_TYPE
+        ]);
 
-      //   $poolChildTax = $poolTax->getChildRate() * $booking->getChildren();
-      //   $poolAdultTax = $poolTax->getAdultRate() * $booking->getAdults();
+        $price = $poolProperty->getAdultRate() + $poolProperty->getChildRate();
 
-      //   $price += $poolChildTax + $poolAdultTax;
-      // }
+        $poolInvoiceLine = new InvoiceLine();
+        $poolInvoiceLine
+          ->setUnitPrice($price)
+          ->setType($poolProperty->getId())
+          ->setFillOrder(3)
+          ->setDays($days)
+          ->setInvoice($invoice);
+        $manager->persist($invoice);
+      }
 
-      // $invoice = new Invoice();
-      // $invoice
-      //   ->setCompanyName("Espadrille Volante")
-      //   ->setCompanyAddress("5 rue de l'espadrille, Perpignan, 66000")
-      //   ->setCustomerName($booking->getCustomerFullName())
-      //   ->setCustomerAddress($booking->getCustomerAddress())
-      //   ->setTva(20)
-      //   ->setUuid(uniqid());
-
-      // $invoiceLine = new InvoiceLine();
-      // $invoiceLine
-      //   ->setAdults($booking->getAdults())
-      //   ->setChildren($booking->getChildren())
-      //   ->setDesignation($booking->getProperty()->getType()->getLabel())
-      //   ->setUnitPrice($price)
-      //   ->setInvoice($invoice);
-
-      // $manager->persist($invoice);
-      // $manager->flush();
+      $manager->flush();
 
       $this->addFlash('success', 'Réservation prise en compte!');
     }

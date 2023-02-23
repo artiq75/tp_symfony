@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Invoice;
+use App\Repository\InvoiceLineRepository;
 use App\Repository\InvoiceRepository;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Component\Pager\PaginatorInterface;
@@ -16,7 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminInvoiceController extends AbstractController
 {
   public function __construct(
-    private InvoiceRepository $repository
+    private InvoiceRepository $repository,
+    private InvoiceLineRepository $invoiceLineRepository
   )
   {
   }
@@ -50,13 +52,18 @@ class AdminInvoiceController extends AbstractController
   #[Route('/facturations/{id}/pdf', name: 'admin.invoice.pdf', methods: ['GET'])]
   public function generatePdf(Invoice $invoice, Pdf $pdf): PdfResponse
   {
-    $html = $this->renderView('pages/admin/invoice/pdf.html.twig', [
+    $invoiceLines = $this->invoiceLineRepository->findBy([
       'invoice' => $invoice
+    ]);
+    
+    $html = $this->renderView('pages/admin/invoice/pdf.html.twig', [
+      'invoice' => $invoice,
+      'invoiceLines' => $invoiceLines
     ]);
 
     return new PdfResponse(
       $pdf->getOutputFromHtml($html),
-      'facture-' . $invoice->getUuid() . '.pdf'
+      date('Y-m-d')
     );
   }
 }

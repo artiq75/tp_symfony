@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class TypeFixtures extends Fixture
 {
-    private const TYPES = [
+    public const TYPES = [
         [
             'label' => 'M-H 3 personnes',
             'adultRate' => 20 * 100,
@@ -74,6 +74,7 @@ class TypeFixtures extends Fixture
                 ->setLabel($type['label']);
 
             $manager->persist($propertyType);
+            $this->addReference($type['label'], $propertyType);
         }
 
         $manager->flush();

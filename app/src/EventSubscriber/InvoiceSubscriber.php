@@ -39,7 +39,7 @@ class InvoiceSubscriber implements EventSubscriberInterface
                         'invoice' => $invoice
                     ]),
                     // Stockage du pdf dans le dossier 'public/pdf/uuid_de_la_facture'
-                    $this->app->getProjectDir() . '/public/pdf/' . $invoice->getUuid() . '/' . time() . '.pdf'
+                    $this->app->getProjectDir() . '/public/pdf/' . date('Y-m-d') . '/' . time() . '.pdf'
                 );
                 // Passer la facture en état inactif
                 $invoice->setIsActive(false);
