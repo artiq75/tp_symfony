@@ -55,10 +55,18 @@ class AdminInvoiceController extends AbstractController
     $invoiceLines = $this->invoiceLineRepository->findBy([
       'invoice' => $invoice
     ]);
-    
+
+    $total = 0;
+
+    // Calcule du total
+    foreach ($invoiceLines as $invoiceLine) {
+      $total += $invoiceLine->getUnitPrice() / 100;
+    }
+
     $html = $this->renderView('pages/admin/invoice/pdf.html.twig', [
       'invoice' => $invoice,
-      'invoiceLines' => $invoiceLines
+      'invoiceLines' => $invoiceLines,
+      'total' => $total
     ]);
 
     return new PdfResponse(

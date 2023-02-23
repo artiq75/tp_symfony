@@ -34,7 +34,6 @@ class PropertyFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $types = $this->typeRepository->findAll();
         $owners = $this->userRepository->findAll();
         $availabilityStart = new \DateTimeImmutable();
 

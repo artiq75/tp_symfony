@@ -64,13 +64,18 @@
       </tr>
     </thead>
     <tbody>
-      {% for invoiceLine in invoiceLines %}
+      {% for invoiceLine in invoiceLines | sort((a, b) => a.fillOrder > b.fillOrder) %}
         <tr>
           <td>{{ invoiceLine.days }}</td>
           <td>{{ invoiceLine.designation }}</td>
           <td>{{ invoiceLine.formatedPrice }}</td>
         </tr>
       {% endfor %}
+      <tr>
+        <td></td>
+        <td><strong>Total</strong></td>
+        <td><strong>{{ total }} €</strong></td>
+      </tr>
     </tbody>
   </table>
 </body>

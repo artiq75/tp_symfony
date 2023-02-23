@@ -18,6 +18,7 @@
         <th>Adresse Entreprise</th>
         <th>Locataire</th>
         <th>Adresse Locataire</th>
+        <th>Date Réservation</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -28,6 +29,10 @@
           <td>{{ invoice.companyAddress }}</td>
           <td>{{ invoice.customerName }}</td>
           <td>{{ invoice.customerAddress }}</td>
+          <td>
+            <strong>{{ invoice.startDate | date('Y-m-d') }} </strong>
+            à <strong>{{ invoice.endDate | date('Y-m-d') }}</strong>
+          </td>
           <td>
             <div class="flex gap1">
               <a class="btn btn-info" href="{{ path('admin.invoice.pdf', {id: invoice.id}) }}" title="Ouvrir en pdf">

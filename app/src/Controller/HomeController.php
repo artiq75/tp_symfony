@@ -87,6 +87,10 @@ class HomeController extends AbstractController
 
       $price = $stayProperty->getAdultRate() + $stayProperty->getChildRate();
 
+      $adultRate = $stayProperty->getAdultRate() * $invoice->getAdults();
+      $chidlrenRate = $stayProperty->getChildRate() * $invoice->getChildren();
+      $price = $adultRate + $chidlrenRate;
+
       $stayInvoiceLine = new InvoiceLine();
       $stayInvoiceLine
         ->setUnitPrice($price)
@@ -106,6 +110,10 @@ class HomeController extends AbstractController
 
         $price = $poolProperty->getAdultRate() + $poolProperty->getChildRate();
 
+        $adultRate = $poolProperty->getAdultRate() * $invoice->getAdults();
+        $chidlrenRate = $poolProperty->getChildRate() * $invoice->getChildren();
+        $price = $adultRate + $chidlrenRate;
+        
         $poolInvoiceLine = new InvoiceLine();
         $poolInvoiceLine
           ->setUnitPrice($price)

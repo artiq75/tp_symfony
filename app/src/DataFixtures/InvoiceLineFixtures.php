@@ -51,7 +51,7 @@ class InvoiceLineFixtures extends Fixture implements DependentFixtureInterface
         ]);
 
         foreach ($this->invoiceRepository->findAll() as $invoice) {
-            $days = $this->faker->numberBetween(7, 20);
+            $days = $invoice->getEndDate()->diff($invoice->getStartDate())->d;
 
             /**
              * @var \App\Entity\Property
@@ -70,7 +70,9 @@ class InvoiceLineFixtures extends Fixture implements DependentFixtureInterface
                 ->setInvoice($invoice);
             $manager->persist($invoiceLine);
 
-            $price = $stayProperty->getAdultRate() + $stayProperty->getChildRate();
+            $adultRate = $stayProperty->getAdultRate() * $invoice->getAdults();
+            $chidlrenRate = $stayProperty->getChildRate() * $invoice->getChildren();
+            $price = $adultRate + $chidlrenRate;
 
             $invoiceLine = new InvoiceLine();
             $invoiceLine
@@ -82,7 +84,9 @@ class InvoiceLineFixtures extends Fixture implements DependentFixtureInterface
                 ->setInvoice($invoice);
             $manager->persist($invoiceLine);
 
-            $price = $poolProperty->getAdultRate() + $poolProperty->getChildRate();
+            $adultRate = $poolProperty->getAdultRate() * $invoice->getAdults();
+            $chidlrenRate = $poolProperty->getChildRate() * $invoice->getChildren();
+            $price = $adultRate + $chidlrenRate;
 
             $invoiceLine = new InvoiceLine();
             $invoiceLine
