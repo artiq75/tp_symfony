@@ -51,7 +51,7 @@ class InvoiceFixtures extends Fixture implements DependentFixtureInterface
                 ->setStartDate($booking->getStartDate())
                 ->setEndDate($booking->getEndDate())
                 ->setIsActive($this->faker->boolean())
-                ->setCreatedAt((new \DateTimeImmutable())->modify('-2 years'));
+                ->setCreatedAt((new \DateTimeImmutable())->modify('-3 years'));
 
             $manager->persist($invoice);
         }
